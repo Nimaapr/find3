@@ -16,18 +16,19 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/mr-tron/base58/base58"
 	"github.com/pkg/errors"
-	"github.com/schollz/find3/server/main/src/models"
+
+	"github.com/Nimaapr/find3/tree/main/server/main/src/models"
 	"github.com/schollz/sqlite3dump"
 	"github.com/schollz/stringsizer"
 )
 
 // MakeTables creates two tables, a `keystore` table:
 //
-// 	KEY (TEXT)	VALUE (TEXT)
+//	KEY (TEXT)	VALUE (TEXT)
 //
 // and also a `sensors` table for the sensor data:
 //
-// 	TIMESTAMP (INTEGER)	DEVICE(TEXT) LOCATION(TEXT)
+//	TIMESTAMP (INTEGER)	DEVICE(TEXT) LOCATION(TEXT)
 //
 // the sensor table will dynamically create more columns as new types
 // of sensor data are inserted. The LOCATION column is optional and

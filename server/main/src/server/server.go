@@ -13,10 +13,11 @@ import (
 	"github.com/gin-contrib/gzip"
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
-	"github.com/schollz/find3/server/main/src/api"
-	"github.com/schollz/find3/server/main/src/database"
-	"github.com/schollz/find3/server/main/src/models"
-	"github.com/schollz/find3/server/main/src/mqtt"
+
+	"github.com/Nimaapr/find3/tree/main/server/main/src/api"
+	"github.com/Nimaapr/find3/tree/main/server/main/src/database"
+	"github.com/Nimaapr/find3/tree/main/server/main/src/models"
+	"github.com/Nimaapr/find3/tree/main/server/main/src/mqtt"
 	"github.com/schollz/utils"
 )
 

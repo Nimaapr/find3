@@ -1,6 +1,6 @@
 package server
 
-import "github.com/schollz/find3/server/main/src/logging"
+import "github.com/Nimaapr/find3/tree/main/server/main/src/logging"
 
 var logger *logging.SeelogWrapper
 

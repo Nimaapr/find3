@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/schollz/find3/server/main/src/database"
+	"github.com/Nimaapr/find3/tree/main/server/main/src/database"
 	"github.com/stretchr/testify/assert"
 )
 

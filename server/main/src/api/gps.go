@@ -2,8 +2,9 @@ package api
 
 import (
 	"github.com/pkg/errors"
-	"github.com/schollz/find3/server/main/src/database"
-	"github.com/schollz/find3/server/main/src/models"
+
+	"github.com/Nimaapr/find3/tree/main/server/main/src/database"
+	"github.com/Nimaapr/find3/tree/main/server/main/src/models"
 )
 
 // GetGPSData returns the latest GPS data

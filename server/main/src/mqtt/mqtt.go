@@ -13,11 +13,12 @@ import (
 
 	MQTT "github.com/eclipse/paho.mqtt.golang"
 	"github.com/pkg/errors"
-	"github.com/schollz/find3/server/main/src/api"
-	"github.com/schollz/find3/server/main/src/database"
-	"github.com/schollz/find3/server/main/src/logging"
-	"github.com/schollz/find3/server/main/src/models"
-	"github.com/schollz/find3/server/main/src/utils"
+
+	"github.com/Nimaapr/find3/tree/main/server/main/src/api"
+	"github.com/Nimaapr/find3/tree/main/server/main/src/database"
+	"github.com/Nimaapr/find3/tree/main/server/main/src/logging"
+	"github.com/Nimaapr/find3/tree/main/server/main/src/models"
+	"github.com/Nimaapr/find3/tree/main/server/main/src/utils"
 )
 
 var (

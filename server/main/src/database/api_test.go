@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/schollz/find3/server/main/src/models"
+	"github.com/Nimaapr/find3/tree/main/server/main/src/models"
 	"github.com/stretchr/testify/assert"
 )
 

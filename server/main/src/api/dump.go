@@ -6,9 +6,9 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/schollz/find3/server/main/src/models"
+	"github.com/Nimaapr/find3/tree/main/server/main/src/models"
 
-	"github.com/schollz/find3/server/main/src/database"
+	"github.com/Nimaapr/find3/tree/main/server/main/src/database"
 )
 
 func Dump(family string) (err error) {
