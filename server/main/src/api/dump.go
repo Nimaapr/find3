@@ -1,5 +1,15 @@
 package api
 
+/*
+This code defines a Go package named api that contains two functions, Dump and writeDatas. The Dump function exports data from a database for a given family of data.
+The writeDatas function takes the family name, a string name and an array of SensorData, and writes the data to a file in JSON format.
+
+The Dump function opens a connection to the database for the given family using the database.Open function, and retrieves all the data for classification using db.GetAllForClassification and all the data not for classification using db.GetAllNotForClassification.
+If there is no data to dump, the function returns an error message. If there is data to dump, the function calls the writeDatas function to write the data to a file in JSON format.
+The filename is constructed using a combination of the family name, the name string and the timestamp of the last data item. Before writing, the function removes any existing file with the same name, and uses the json package to marshal each data item into its JSON representation.
+After writing, the function calls f.Sync to flush the data to disk.
+*/
+
 import (
 	"encoding/json"
 	"errors"

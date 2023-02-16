@@ -1,5 +1,13 @@
 package api
 
+/*
+This code is a Go (Golang) program that tests functionality related to sensor data management.
+The code tests two functions: "dumpSensorsToCSV" and "RisingEfficacy".
+The "dumpSensorsToCSV" function writes a slice of sensor data to a CSV file and the "RisingEfficacy" function tests the efficacy of various algorithms for learning from a set of sensor data.
+The "main" code sets up a database, populates it with sample data, calls the "dumpSensorsToCSV" and "RisingEfficacy" functions
+and performs tests using the "assert" library to verify that the functions work as expected.
+*/
+
 import (
 	"bufio"
 	"bytes"

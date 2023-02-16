@@ -1,5 +1,42 @@
 package models
 
+/*
+The code is written in Golang and defines structs, functions, and methods related to storing and validating sensor data. The main structs defined in the code are SensorData, GPS, FINDFingerprint, and Router.
+
+SensorData is the typical data structure for storing sensor data, it contains the following fields:
+
+Timestamp (an int64): a unique identifier, the time in milliseconds
+Family (a string): a group of devices
+Device (a string): unique within a family
+Location (a string): optional, used for classification
+Sensors (a map of map of interface{}): contains a map of sensor data
+GPS (a struct of type GPS): optional
+
+GPS is a struct containing GPS data, it has the following fields:
+
+Latitude (a float64)
+Longitude (a float64)
+Altitude (a float64)
+
+FINDFingerprint is the prototypical information from the fingerprinting device, it has the following fields:
+
+Group (a string)
+Username (a string)
+Location (a string)
+Timestamp (an int64)
+WifiFingerprint (a slice of type Router)
+
+Router is the router information for each individual mac address, it has two fields:
+
+Mac (a string)
+Rssi (an int)
+
+The SensorData struct has a method named Validate that validates that the fingerprint is okay. It checks if the Family, Device, and Timestamp fields are not empty, if the Timestamp is valid, and if the Sensors data is not empty.
+If the Timestamp is equal to 0, the method sets it to the current time in UTC in milliseconds.
+
+The FINDFingerprint struct has a method named Convert that converts it into a SensorData struct.
+*/
+
 import (
 	"errors"
 	"strings"

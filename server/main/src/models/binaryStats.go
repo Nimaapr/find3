@@ -1,5 +1,20 @@
 package models
 
+/*
+This code is part of a Go package models. It defines a structure called BinaryStats that calculates statistics for binary classification.
+The structure has fields for true positives (TruePositives), false positives (FalsePositives), true negatives (TrueNegatives), and false negatives (FalseNegatives) counts, as well as the following metrics derived from these counts:
+
+Sensitivity (Sensitivity) or True Positive Rate
+Specificity (Specificity) or True Negative Rate
+Informedness (Informedness) (Sensitivity + Specificity - 1)
+Matthews Correlation Coefficient (MCC)
+Fisher's P test (FisherP)
+
+The function NewBinaryStats returns a BinaryStats object given the counts of true positives (tp), false positives (fp), true negatives (tn), and false negatives (fn). It calculates the statistics using the given counts and sets the fields of the returned BinaryStats object.
+
+The function NChooseK calculates the number of combinations (n choose k) of n elements taken k at a time. The function first calculates this value using the Binomial function of the big package and then converts it to a float64 using the SetInt and Float64 functions of the big.Float type.
+*/
+
 import (
 	"math"
 	"math/big"

@@ -1,5 +1,20 @@
 package api
 
+/*
+The code is a Go (Golang) program that performs machine learning on sensor data. It calibrates two different machine learning algorithms (Naive Bayes 1 and Naive Bayes 2) on a dataset obtained from a database (using the database package).
+The data is randomly split into a training set and a test set for cross-validation purposes. The program also calls a Python learning algorithm. The accuracy of the algorithms is compared to find the best algorithm for the given data.
+The code also includes functions for handling HTTP requests and responses, reading and writing to the file system, and basic utility functions for logging and error handling.
+
+Another explanation:
+The code is a Go function Calibrate that trains machine learning algorithms. It retrieves sensor data from a database, splits it into a learning set and a testing set, trains 2 different Go-based Naive Bayes algorithms and a Python-based machine learning algorithm using the learning set.
+If the cross-validation flag is set, it launches a separate go routine findBestAlgorithm to find the best algorithm using the testing set.
+
+The code also has a helper function splitDataForLearning that splits the data into a learning set and a testing set based on cross-validation flag. The data is randomly shuffled, and if the size is larger than 1000, it is truncated to 1000 elements.
+Then it splits the data into two sets: one used for learning and one used for testing. The data points in the same location are grouped together, and the split is done such that there are 70% of data points for learning and 30% for testing.
+
+Another explanation with more details at the end.
+*/
+
 import (
 	"bytes"
 	"encoding/json"
@@ -470,3 +485,24 @@ func dumpSensorsToCSV(datas []models.SensorData, csvFile string) (err error) {
 
 	return
 }
+
+/*
+This code is part of a machine learning project that aims to calibrate the performance of algorithms used for classifying sensor data. The code is written in Go and uses Naive Bayes algorithms to classify the sensor data.
+
+There are two main functions in this code:
+
+Calibrate(family string, crossValidation ...bool): This function sends the sensor data for a specific family to the machine learning algorithms for calibration.
+The function starts by opening a connection to the database, which stores the sensor data. It then retrieves all the data from the database and closes the connection. After that, the function splits the retrieved data into two sets, one for learning (training the algorithms) and one for testing the algorithms.
+
+The code then performs two different Naive Bayes fittings, one using the "nb1" library, and the other using the "nb2" library. After that, the code calls the "learnFromData" function, which uses a Python algorithm to perform the machine learning.
+
+Finally, if the "crossValidation" argument is set to true, the function calls the "findBestAlgorithm" function in a separate goroutine to find the best-performing algorithm based on the test data.
+
+splitDataForLearning(datas []models.SensorData, crossValidation ...bool): This function splits the retrieved sensor data into two sets, one for learning and one for testing.
+
+The function starts by checking if there are at least two data points in the "datas" argument. If there are less than two data points, the function returns an error.
+
+If the "crossValidation" argument is set to true, the function randomly shuffles the order of the data points and splits them into two sets based on a 50/50 or 70/30 split, depending on the number of data points. If the number of data points is less than 10, it uses a 50/50 split, and if it's greater than 10, it uses a 70/30 split.
+
+The function then returns two slices of the "models.SensorData" struct, one for the learning set and one for the test set.
+*/

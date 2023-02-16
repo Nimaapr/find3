@@ -1,5 +1,22 @@
 package api
 
+/*
+This is a Go programming code in the package api. It defines a function GetGPSData which retrieves the latest GPS data based on the input family string.
+
+The function starts by initializing an empty map gpsData of type map[string]models.SensorData. Then it opens a connection to a database (using the function database.Open) with the input family name and a boolean flag that determines whether to open the database in read-only mode.
+If there is an error opening the database, the error is wrapped with a custom error message and returned immediately. The database connection is then closed with the defer d.Close() statement.
+
+Next, the code retrieves the locations from the database using the d.GetLocations() method. If there is an error, the error is wrapped with a custom error message and returned immediately.
+
+The code then initializes the gpsData map with default values (latitude = -1, longitude = -1) for each of the retrieved locations.
+
+After that, the code attempts to retrieve the auto GPS data from the database using the d.Get("autoGPS", &autoGPS) method. If the data is successfully retrieved, it updates the values in the gpsData map with the retrieved latitude and longitude values.
+
+Finally, the code attempts to retrieve the custom GPS data from the database using the d.Get("customGPS", &customGPS) method. If the data is successfully retrieved, it updates the values in the gpsData map with the retrieved latitude and longitude values.
+
+The function returns the gpsData map and an error value.
+*/
+
 import (
 	"github.com/pkg/errors"
 

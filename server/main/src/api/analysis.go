@@ -1,5 +1,11 @@
 package api
 
+/*
+This is a Go language program that implements a REST API that analyzes the location of a device based on the sensor data it provides.
+The API communicates with a machine learning component that performs the actual analysis and returns the results to the API. The API caches the results and serves them to subsequent requests.
+The machine learning component is implemented in Python and is hosted on a separate server. The API uses an HTTP client to communicate with the machine learning component via a RESTful API.
+The API also implements a Naive Bayes machine learning algorithm in Go as a fallback option in case the communication with the machine learning component fails.
+*/
 import (
 	"bytes"
 	"encoding/json"

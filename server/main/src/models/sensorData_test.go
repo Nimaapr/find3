@@ -1,5 +1,33 @@
 package models
 
+/*
+This is Go code for running tests on a SensorData data structure and related functionality.
+
+The SensorData structure represents the data from some sort of sensor device, with the following fields:
+
+T: a timestamp
+F: a string representing a "family name"
+D: a string representing a "device name"
+L: a string representing the device's location
+Sensors: a map of string keys to nested maps of string keys to float64 values. This represents the different sensor types and their readings.
+
+
+The code tests three main things:
+
+Unmarshalling JSON data into a SensorData structure, and verifying that the values are stored correctly.
+Calling the Validate method on the SensorData structure, to verify that it returns nil (i.e., the data is valid).
+Converting a FINDFingerprint structure into a SensorData structure, and verifying that the values are stored correctly.
+
+
+The FINDFingerprint structure is a different format for representing the same data, with the following fields:
+
+Username: a string representing the device name
+Group: a string representing the family name
+Location: a string representing the device's location
+Timestamp: a timestamp
+Wifi-fingerprint: an array of objects, each with an rssi field (representing the strength of a Wi-Fi signal) and a mac field (representing the MAC address of the Wi-Fi device).
+*/
+
 import (
 	"encoding/json"
 	"fmt"

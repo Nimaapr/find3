@@ -1,5 +1,20 @@
 package api
 
+/*
+The code is a Go program that is part of an API. It defines several functions and variables used to generate and retrieve images.
+
+The GetImage function takes a family and a location string as inputs and returns an image in the form of a byte slice and an error. The image is read from a file using ioutil.ReadFile, with the path being constructed using the family and location inputs.
+
+The GenerateImages function takes a family string as input and generates images for that family by sending a POST request to a specified endpoint with a payload containing the URL and data folder for the images.
+The payload is constructed from a struct called Payload and is sent as a JSON object in the body of the request. The response from the endpoint is decoded into a struct called responseStruct, which contains a success flag and a message.
+
+The MainPort variable is a string that represents the main port used in the API.
+
+The FastBase58Encoding function from the base58 package is used to encode the family string before it is used in constructing the image path and data folder.
+
+more explanation below the code.
+*/
+
 import (
 	"bytes"
 	"encoding/json"
@@ -65,3 +80,33 @@ func GenerateImages(family string) {
 	}
 	logger.Log.Debug(target)
 }
+
+//
+/*
+This code is a Go program that implements an HTTP client that sends a POST request to a REST API. The program is part of a package named api, and it contains several functions, including GetImage, GenerateImages, etc.
+
+The GetImage function retrieves an image from the local file system using the ioutil.ReadFile method. The path to the image is constructed using the path.Join method and is comprised of the DataFolder and the family and location parameters passed to the function.
+The base58.FastBase58Encoding method is used to encode the family string as a Base58 string.
+
+The GenerateImages function generates images for the given family by sending a POST request to a REST API running on localhost on the specified AIPort. The request payload contains a JSON object that consists of two fields: URL and DataFolder.
+The URL field contains the URL of the REST API endpoint, and the DataFolder field contains the path to the images folder.
+
+The HTTP request is created using the http.NewRequest method, and its header is set to contain the content type of the payload, which is "application/json". The request is sent using the http.DefaultClient.Do method, which returns an HTTP response.
+
+The response body is then decoded into a struct responseStruct using the json.NewDecoder method. The struct consists of two fields: Message and Success. The Message field contains the response message, and the Success field is a boolean value indicating whether the request was successful.
+The contents of the response are logged using the logger.Log.Debug method.
+*/
+/*
+Explain more on GetImage function:
+
+The GetImage function retrieves an image file. It takes two arguments as input: family and location. The image file is constructed using family and location as follows:
+
+imagePath is constructed using the path.Join function. The arguments to path.Join are the data folder, a subfolder named "images", the base58 encoding of family and the location with a ".png" extension.
+
+The image file is then read using ioutil.ReadFile and stored in the img variable.
+
+Finally, the function returns the img variable and an err variable, which is set to nil if there were no errors.
+
+
+Note that the logger.Log.Debugf function is used to log the process of loading the image file.
+*/

@@ -1,5 +1,17 @@
 package api
 
+/*
+The purpose of this code is to save and process sensor data and location predictions in a database.
+
+The code defines two main functions:
+
+SaveSensorData - This function validates and stores sensor data in a database. If the data contains GPS information, it updates that as well.
+SavePrediction - This function stores location predictions in the database.
+Additionally, there is a helper function "updateCounter", which maintains a count of the number of new fingerprints for each family. If the number of new fingerprints for a particular family exceeds 5, the code will trigger a re-calibration process.
+
+There is also a struct "UpdateCounterMap" which holds the count of locations for each family, and uses a RWMutex to synchronize access to it from multiple goroutines. The globalUpdateCounter variable is an instance of this struct, and the init() function initializes the count map.
+*/
+
 import (
 	"sync"
 	"time"
