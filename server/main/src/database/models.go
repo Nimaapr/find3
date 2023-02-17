@@ -6,7 +6,7 @@ import (
 
 	_ "github.com/mattn/go-sqlite3"
 
-	"github.com/Nimaapr/find3/tree/main/server/main/src/logging"
+	"github.com/Nimaapr/find3/server/main/src/logging"
 )
 
 // DataFolder is set to where you want each Sqlite3 database to be stored

@@ -10,7 +10,7 @@ The Debug function is used to control the log level of the logger. If the debugM
 It's worth noting that this code is using the Seelog logging library, which is an efficient logging library for Go.
 */
 
-import "github.com/Nimaapr/find3/tree/main/server/main/src/logging"
+import "github.com/Nimaapr/find3/server/main/src/logging"
 
 var logger *logging.SeelogWrapper
 

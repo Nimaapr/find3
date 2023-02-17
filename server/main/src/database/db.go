@@ -17,7 +17,7 @@ import (
 	"github.com/mr-tron/base58/base58"
 	"github.com/pkg/errors"
 
-	"github.com/Nimaapr/find3/tree/main/server/main/src/models"
+	"github.com/find3/server/main/src/models"
 	"github.com/schollz/sqlite3dump"
 	"github.com/schollz/stringsizer"
 )

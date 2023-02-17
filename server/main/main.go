@@ -12,10 +12,10 @@ import (
 
 	"fmt"
 
-	"github.com/Nimaapr/find3/tree/main/server/main/src/api"
-	"github.com/Nimaapr/find3/tree/main/server/main/src/database"
-	"github.com/Nimaapr/find3/tree/main/server/main/src/mqtt"
-	"github.com/Nimaapr/find3/tree/main/server/main/src/server"
+	"github.com/Nimaapr/find3/server/main/src/api"
+	"github.com/Nimaapr/find3/server/main/src/database"
+	"github.com/Nimaapr/find3/server/main/src/mqtt"
+	"github.com/Nimaapr/find3/server/main/src/server"
 )
 
 func main() {

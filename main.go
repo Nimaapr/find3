@@ -4,7 +4,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/Nimaapr/find3/tree/main/doc"
+	"github.com/Nimaapr/find3/doc"
 )
 
 func main() {

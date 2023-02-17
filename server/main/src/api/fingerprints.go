@@ -16,8 +16,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/Nimaapr/find3/tree/main/server/main/src/database"
-	"github.com/Nimaapr/find3/tree/main/server/main/src/models"
+	"github.com/Nimaapr/find3/server/main/src/database"
+	"github.com/Nimaapr/find3/server/main/src/models"
 )
 
 type UpdateCounterMap struct {

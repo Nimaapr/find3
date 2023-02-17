@@ -28,11 +28,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Nimaapr/find3/tree/main/server/main/src/database"
-	"github.com/Nimaapr/find3/tree/main/server/main/src/learning/nb1"
-	"github.com/Nimaapr/find3/tree/main/server/main/src/learning/nb2"
-	"github.com/Nimaapr/find3/tree/main/server/main/src/models"
-	"github.com/Nimaapr/find3/tree/main/server/main/src/utils"
+	"github.com/Nimaapr/find3/server/main/src/database"
+	"github.com/Nimaapr/find3/server/main/src/learning/nb1"
+	"github.com/Nimaapr/find3/server/main/src/learning/nb2"
+	"github.com/Nimaapr/find3/server/main/src/models"
+	"github.com/Nimaapr/find3/server/main/src/utils"
 )
 
 // Calibrate will send the sensor data for a specific family to the machine learning algorithms
