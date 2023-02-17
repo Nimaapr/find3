@@ -46,7 +46,7 @@ RUN python3 -m pip install Cython --install-option="--no-cython-compile" && \
 	export PATH="/usr/local/go/bin:$PATH"; \
 	go version && \
 	mkdir /build && cd /build && \
-	git clone https://github.com/Nimaapr/find3/tree/main && \
+	git clone https://github.com/Nimaapr/find3.git && \
 	mkdir /data && \
 	mkdir /app && \
 	echo '#!/bin/bash\n\
