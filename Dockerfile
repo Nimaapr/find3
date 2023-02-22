@@ -21,6 +21,7 @@ RUN python3 -m pip install Cython --install-option="--no-cython-compile" && \
 RUN apk add --no-cache jpeg-dev zlib-dev
 RUN apk add --no-cache --virtual .build-deps build-base linux-headers \
     && pip install Pillow
+	\
 
 # this "case" statement is generated via "update.sh"
 	dpkgArch="$(dpkg --print-architecture)"; \
