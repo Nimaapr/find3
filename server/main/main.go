@@ -32,12 +32,22 @@ import (
 // If the user specifies a family database to dump, the program dumps the database, otherwise it runs the server.
 
 func main() {
+
+	oldName := "/static/img2/org_floorplan1.png"
+	newName := "/static/img2/org_floorplan2.png"
+
+	err := os.Rename(oldName, newName)
+	if err != nil {
+		panic(err)
+	}
+
 	go func() {
 		for {
 			// Run the Python script every 30 seconds
 			time.Sleep(30 * time.Second)
 			rand.Seed(time.Now().UnixNano())
 			randomInt := rand.Intn(8)
+			// is this path to python file correct? maybe use absolute pass?
 			cmd := exec.Command("python", "./src/server/FP_update.py", "1", "test", strconv.Itoa(randomInt))
 			var err error
 			err = cmd.Run()
