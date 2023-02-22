@@ -90,7 +90,7 @@ func main() {
 			position := accessPoints[location]
 			draw.Draw(imgRGBA, image.Rect(position.X-10, position.Y-10, position.X+10, position.Y+10),
 				&image.Uniform{color.RGBA{255, 0, 0, 255}}, image.Point{0, 0}, draw.Src)
-			f, err := os.Create(fmt.Sprintf("/app/main/static/img2/floorplan%d.png", floorLevel))
+			f, _ := os.Create(fmt.Sprintf("/app/main/static/img2/floorplan%d.png", floorLevel))
 			// if err != nil {
 			// 	return err
 			// }
