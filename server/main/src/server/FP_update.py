@@ -1,5 +1,5 @@
 import matplotlib.pyplot as plt
-from PIL import Image
+# from PIL import Image
 # I have to add access points in another way
 import sys
 
