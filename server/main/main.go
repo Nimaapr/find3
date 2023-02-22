@@ -34,13 +34,14 @@ import (
 
 func main() {
 
-	// oldName := "/static/img2/org_floorplan1.png"
-	// newName := "/static/img2/org_floorplan2.png"
+	// maybe change address? this address is not true. I got this from frontend.
+	oldName := "/app/main/static/img2/org_floorplan1.png"
+	newName := "/app/main/static/img2/org_floorplan2.png"
 
-	// erro := os.Rename(oldName, newName)
-	// if erro != nil {
-	// 	panic(erro)
-	// }
+	erro := os.Rename(oldName, newName)
+	if erro != nil {
+		panic(erro)
+	}
 
 	// go func() {
 	// 	for {
