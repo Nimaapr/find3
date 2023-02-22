@@ -32,7 +32,6 @@ import (
 // If the user specifies a family database to dump, the program dumps the database, otherwise it runs the server.
 
 func main() {
-	var err error
 	go func() {
 		for {
 			// Run the Python script every 30 seconds
@@ -41,7 +40,7 @@ func main() {
 			randomInt := rand.Intn(8)
 			cmd := exec.Command("python", "./src/server/FP_update.py", "1", "test", strconv.Itoa(randomInt))
 			err = cmd.Run()
-			if err != nil {
+			if err := cmd.Run(); err != nil {
 				log.Println("error running Python script:", err)
 			}
 		}
