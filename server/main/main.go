@@ -3,8 +3,9 @@ package main
 import (
 	"flag"
 	"image"
+	"image/color"
 	"image/draw"
-	"image/png"
+	// "image/png"
 	"log"
 	"math/rand"
 	"os"
