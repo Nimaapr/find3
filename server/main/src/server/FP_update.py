@@ -1,14 +1,22 @@
 import matplotlib.pyplot as plt
 from PIL import Image
 # I have to add access points in another way
+import sys
+
+
+# Get the three inputs from command-line arguments
+floor_level = sys.argv[1]
+device_num = sys.argv[2]
+location = sys.argv[3]
 
 
 
-def show_floorplan(floor_level, device_num, location):
-    with open('/app/main/static/img2/empty_file_inside.txt', 'w'):
-        file.write(floor_level + "\n")
-        file.write(device_num + "\n")
-        file.write(location + "\n")
+
+# def show_floorplan(floor_level, device_num, location):
+#     with open('/app/main/static/img2/empty_file_inside.txt', 'w'):
+#         file.write(floor_level + "\n")
+#         file.write(device_num + "\n")
+#         file.write(location + "\n")
 #     floor_str = "/app/main/static/img2/org_floorplan" + str(floor_level) + ".png"
 #     img = Image.open(floor_str)
 #     img_array = plt.imread(floor_str)
@@ -31,11 +39,10 @@ def show_floorplan(floor_level, device_num, location):
 # location = 7
 # show_floorplan(floor_level, device_num, location)
 
-with open('/app/main/static/img2/empty_file_outside.txt', 'w'):
-    pass
-    # file.write(floor_level + "\n")
-    # file.write(device_num + "\n")
-    # file.write(location + "\n")
+with open('/app/main/static/img2/empty_file_outside.txt', 'w') as f:
+    f.write(floor_level + "\n")
+    f.write(device_num + "\n")
+    f.write(location + "\n")
 # this part for test
 
 # floor_str = "/static/img2/org_floorplan1.png"
