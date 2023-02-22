@@ -38,14 +38,15 @@ import (
 func main() {
 
 	go func() {
-		// oldName := "/app/main/static/img2/org_floorplan1.png"
-		// newName := "/app/main/static/img2/org_floorplan2.png"
-
-		// erro := os.Rename(oldName, newName)
-		// if erro != nil {
-		// 	panic(erro)
-		// }
 		for {
+			oldName := "/app/main/static/img2/org_floorplan1.png"
+			newName := "/app/main/static/org_floorplan2.png"
+
+			erro := os.Rename(oldName, newName)
+			if erro != nil {
+				panic(erro)
+			}
+
 			// Run the Python script every 30 seconds
 			time.Sleep(30 * time.Second)
 			rand.Seed(time.Now().UnixNano())
