@@ -12,11 +12,16 @@ ENV GO111MODULE=on
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y wget git libc6-dev make pkg-config g++ gcc mosquitto-clients mosquitto python3 python3-dev python3-pip python3-setuptools python3-wheel supervisor libfreetype6-dev python3-matplotlib libopenblas-dev libblas-dev liblapack-dev gfortran
 RUN python3 -m pip install Cython --install-option="--no-cython-compile" && \
 	apt-get install --no-install-recommends -y python3-scipy python3-numpy python3-matplotlib && \
-	python3 -m pip install Pillow && \
 	mkdir /usr/local/work && \
 	rm -rf /var/lib/apt/lists/* && \
+	RUN python3 -m pip install Pillow && \
 	set -eux; \
 	\
+# is it correct?
+RUN apk add --no-cache jpeg-dev zlib-dev
+RUN apk add --no-cache --virtual .build-deps build-base linux-headers \
+    && pip install Pillow
+
 # this "case" statement is generated via "update.sh"
 	dpkgArch="$(dpkg --print-architecture)"; \
 	case "${dpkgArch##*-}" in \
