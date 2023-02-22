@@ -41,21 +41,21 @@ func main() {
 		panic(erro)
 	}
 
-	go func() {
-		for {
-			// Run the Python script every 30 seconds
-			time.Sleep(30 * time.Second)
-			rand.Seed(time.Now().UnixNano())
-			randomInt := rand.Intn(8)
-			// is this path to python file correct? maybe use absolute pass?
-			cmd := exec.Command("python", "./src/server/FP_update.py", "1", "test", strconv.Itoa(randomInt))
-			var err error
-			err = cmd.Run()
-			if err != nil {
-				log.Println("error running Python script:", err)
-			}
-		}
-	}()
+	// go func() {
+	// 	for {
+	// 		// Run the Python script every 30 seconds
+	// 		time.Sleep(30 * time.Second)
+	// 		rand.Seed(time.Now().UnixNano())
+	// 		randomInt := rand.Intn(8)
+	// 		// is this path to python file correct? maybe use absolute pass?
+	// 		cmd := exec.Command("python", "./src/server/FP_update.py", "1", "test", strconv.Itoa(randomInt))
+	// 		var err error
+	// 		err = cmd.Run()
+	// 		if err != nil {
+	// 			log.Println("error running Python script:", err)
+	// 		}
+	// 	}
+	// }()
 
 	aiPort := flag.String("ai", "8002", "port for the AI server")
 	port := flag.String("port", "8003", "port for the data (this) server")
