@@ -50,7 +50,7 @@ func main() {
 			time.Sleep(30 * time.Second)
 			rand.Seed(time.Now().UnixNano())
 			randomInt := rand.Intn(8)
-			cmd := exec.Command("python", "/app/main/src/server/FP_update.py", "1", "test", strconv.Itoa(randomInt))
+			cmd := exec.Command("python3", "/app/main/src/server/FP_update.py", "1", "test", strconv.Itoa(randomInt))
 			// cmd := exec.Command("python3", "/app/main/src/server/FP_update.py")
 			var err error
 			err = cmd.Run()
