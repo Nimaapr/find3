@@ -6,7 +6,7 @@ import (
 	// "image/color"
 	// "image/draw"
 	"log"
-	"math/rand"
+	// "math/rand"
 	"os"
 	"os/exec"
 	"path"
@@ -23,10 +23,6 @@ import (
 	"github.com/Nimaapr/find3/server/main/src/mqtt"
 	"github.com/Nimaapr/find3/server/main/src/server"
 )
-
-// 	"math/rand"
-// 	"os/exec"
-// "strconv"
 
 // This is a Go program that runs a server for a location tracking system called "find3". The program takes in command-line arguments, including ports,
 // whether to turn on debugging mode, and whether to use an MQTT server.
@@ -51,11 +47,11 @@ func main() {
 			// }
 
 			// Run the Python script every 30 seconds
-			time.Sleep(30 * time.Second)
-			rand.Seed(time.Now().UnixNano())
-			randomInt := rand.Intn(8)
-			// is this path to python file correct? maybe use absolute pass?
-			cmd := exec.Command("python", "/app/main/src/server/FP_update.py", "1", "test", strconv.Itoa(randomInt))
+			// time.Sleep(30 * time.Second)
+			// rand.Seed(time.Now().UnixNano())
+			// randomInt := rand.Intn(8)
+			// cmd := exec.Command("python", "/app/main/src/server/FP_update.py", "1", "test", strconv.Itoa(randomInt))
+			cmd := exec.Command("python", "/app/main/src/server/FP_update.py")
 			var err error
 			err = cmd.Run()
 			if err != nil {
