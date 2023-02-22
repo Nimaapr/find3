@@ -5,7 +5,7 @@ from PIL import Image
 
 
 def show_floorplan(floor_level, device_num, location):
-    floor_str = "/static/img2/org_floorplan" + str(floor_level) + ".png"
+    floor_str = "/app/main/static/img2/org_floorplan" + str(floor_level) + ".png"
     img = Image.open(floor_str)
     img_array = plt.imread(floor_str)
     fig, ax = plt.subplots()
@@ -19,7 +19,7 @@ def show_floorplan(floor_level, device_num, location):
     position = access_points[int(location)]
     ax.add_patch(plt.Circle(position, radius=10, color='r'))
     ax.annotate(f"Device {device_num}", position, color='r')
-    fig.savefig('/static/img2/floorplan{}.png'.format(floor_level))
+    fig.savefig('/app/main/static/img2/floorplan{}.png'.format(floor_level))
     # plt.show()
 
 # floor_level = 1
