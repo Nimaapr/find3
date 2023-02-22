@@ -14,6 +14,30 @@ from scipy.stats import gaussian_kde
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 
+# This code is a Python script that fetches data from a specified URL, processes the data to extract sensor data for each location, 
+# identifies the sensors with the largest variance in the data, and generates plots of the sensor data for each location.
+
+# Here is a high-level overview of what the script does:
+# Sends a GET request to the specified URL and extracts the data from the response in JSON format.
+
+# Processes the JSON data to extract sensor data for each location, and calculates the median value of each sensor's data across all locations.
+
+# Calculates the variance of each sensor across all locations, and identifies the sensors with the largest variance (up to a maximum of 10 sensors).
+
+# Generates plots of the sensor data for each location using the identified sensors, with the x-axis representing the range of sensor data values and the y-axis representing the density of data values within that range. 
+# The plots are saved as PNG images in a specified directory.
+
+# The colors for the plotted sensor data are generated randomly using the randomcolor library, with each sensor being assigned a unique color.
+
+
+
+
+
+
+
+
+
+
 def getcolor(s):
     random.seed(int(hashlib.sha256(s.encode('utf-8')).hexdigest(), 16) % 10**8)
     return randomcolor.RandomColor().generate()[0]

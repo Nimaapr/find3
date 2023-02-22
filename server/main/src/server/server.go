@@ -6,6 +6,7 @@ import (
 	"html/template"
 	"net/http"
 	"os"
+	"os/exec"
 	"strconv"
 	"strings"
 	"time"
@@ -1338,6 +1339,13 @@ func sendOutData(p models.SensorData) (analysis models.LocationAnalysis, err err
 
 	p.Family = strings.TrimSpace(strings.ToLower(p.Family))
 
+	// call Python function
+	cmd := exec.Command("python", "FP_Update.py", "1", p.Device, analysis.Guesses[0].Location)
+	err = cmd.Run()
+	if err != nil {
+		return
+	}
+
 	// logger.Log.Debugf("sending data over websockets (%s/%s):%s", p.Family, p.Device, bTarget)
 	SendMessageOverWebsockets(p.Family, p.Device, bTarget)
 	SendMessageOverWebsockets(p.Family, "all", bTarget)
@@ -1346,6 +1354,7 @@ func sendOutData(p models.SensorData) (analysis models.LocationAnalysis, err err
 		logger.Log.Debugf("[%s] sending data over mqtt (%s)", p.Family, p.Device)
 		mqtt.Publish(p.Family, p.Device, string(bTarget))
 	}
+
 	return
 }
 

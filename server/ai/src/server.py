@@ -5,6 +5,29 @@ import logging
 
 from expiringdict import ExpiringDict
 
+# This is a Python script that sets up a Flask server to provide a REST API for a machine learning application called FIND3. 
+# The script listens for HTTP requests and responds with JSON data.
+
+# The script defines a number of API endpoints using the Flask library. The @app.route decorator specifies the URL path for each endpoint, 
+# and the methods argument specifies the HTTP methods that are allowed for each endpoint (in this case, only POST is allowed).
+
+# There are three endpoints:
+# /plot: This endpoint generates data from the sensor, specified in the POST request and saves the data to a specified location.
+
+# /classify: This endpoint classifies the sensor data and returns the analysis in JSON format. The trained machine learning model is loaded from a file if available; otherwise, it is trained on the data.
+
+# /learn: This endpoint trains the machine learning model on the provided data and saves the model to a file.
+
+# The script uses a number of external libraries, including:
+# os: for file system operations.
+# time: for measuring time intervals.
+# base58: for encoding and decoding data in base 58 format.
+# logging: for logging messages to a file and the console.
+# flask: for creating the REST API server.
+# expiringdict: for caching the machine learning model for a specified period of time.
+
+# When the script is run as the main program, it starts the Flask server on the local machine on port 5000.
+
 
 # create logger with 'spam_application'
 logger = logging.getLogger('server')
