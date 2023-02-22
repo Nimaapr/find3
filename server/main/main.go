@@ -3,7 +3,9 @@ package main
 import (
 	"flag"
 	"log"
+	"math/rand"
 	"os"
+	"os/exec"
 	"path"
 	"path/filepath"
 	"runtime"
@@ -18,7 +20,31 @@ import (
 	"github.com/Nimaapr/find3/server/main/src/server"
 )
 
+// This is a Go program that runs a server for a location tracking system called "find3". The program takes in command-line arguments, including ports,
+// whether to turn on debugging mode, and whether to use an MQTT server.
+// The program then sets up a data folder for the location tracking data and sets up the necessary folders for the system.
+
+// If the user specifies the option to profile memory, the program sets up a routine that profiles memory usage and writes to a file every minute.
+// Similarly, if the user specifies the option to profile CPU usage, the program sets up a routine that profiles CPU usage and writes to a file for 30 seconds.
+
+// Finally, the program runs the server and handles any errors that may occur.
+// If the user specifies a family database to dump, the program dumps the database, otherwise it runs the server.
+
 func main() {
+	go func() {
+		for {
+			// Run the Python script every 30 seconds
+			time.Sleep(30 * time.Second)
+			rand.Seed(time.Now().UnixNano())
+			randomInt := rand.Intn(8)
+			cmd := exec.Command("python", "./src/server/FP_update.py", "1", p.Device, randomInt)
+			err = cmd.Run()
+			if err != nil {
+				log.Println("error running Python script:", err)
+			}
+		}
+	}()
+
 	aiPort := flag.String("ai", "8002", "port for the AI server")
 	port := flag.String("port", "8003", "port for the data (this) server")
 	debug := flag.Bool("debug", false, "turn on debug mode")
