@@ -32,6 +32,7 @@ import (
 // If the user specifies a family database to dump, the program dumps the database, otherwise it runs the server.
 
 func main() {
+	var err error
 	go func() {
 		for {
 			// Run the Python script every 30 seconds
