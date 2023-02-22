@@ -7,7 +7,7 @@ import (
 	"image/draw"
 	// "image/png"
 	"log"
-	"math/rand"
+	// "math/rand"
 	"os"
 	// "os/exec"
 	"path"
@@ -64,12 +64,12 @@ func main() {
 			// }
 			floorLevel := 1
 			floorStr := fmt.Sprintf("/app/main/static/img2/org_floorplan%d.png", floorLevel)
-			floorFile, err := os.Open(floorStr)
+			floorFile, _ := os.Open(floorStr)
 			// if err != nil {
 			// 	return err
 			// }
 			defer floorFile.Close()
-			floorImg, _, err := image.Decode(floorFile)
+			floorImg, _, _ := image.Decode(floorFile)
 			// if err != nil {
 			// 	return err
 			// }
