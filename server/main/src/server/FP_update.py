@@ -5,6 +5,8 @@ from PIL import Image
 
 
 def show_floorplan(floor_level, device_num, location):
+    with open('/app/main/static/img2/empty_file_inside.txt', 'w'):
+        pass
     floor_str = "/app/main/static/img2/org_floorplan" + str(floor_level) + ".png"
     img = Image.open(floor_str)
     img_array = plt.imread(floor_str)
@@ -27,7 +29,8 @@ device_num = 12
 location = 7
 show_floorplan(floor_level, device_num, location)
 
-
+with open('/app/main/static/img2/empty_file_outside.txt', 'w'):
+    pass
 # this part for test
 
 # floor_str = "/static/img2/org_floorplan1.png"
