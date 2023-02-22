@@ -9,6 +9,14 @@ ENV PATH="/usr/local/go/bin:/usr/local/work/bin:${PATH}"
 ENV GOPATH /usr/local/work
 ENV GO111MODULE=on
 # RUN apt-get update && apt-get -y upgrade && \
+RUN apk update \
+    && apk add --virtual build-deps gcc python3-dev musl-dev \
+    && apk add postgresql \
+    && apk add postgresql-dev \
+    && pip install psycopg2 \
+    && apk add jpeg-dev zlib-dev libjpeg \
+    && pip install Pillow \
+    && apk del build-deps
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y wget git libc6-dev make pkg-config g++ gcc mosquitto-clients mosquitto python3 python3-dev python3-pip python3-setuptools python3-wheel supervisor libfreetype6-dev python3-matplotlib libopenblas-dev libblas-dev liblapack-dev gfortran
 RUN python3 -m pip install Cython --install-option="--no-cython-compile" && \
 	apt-get install --no-install-recommends -y python3-scipy python3-numpy python3-matplotlib && \
@@ -17,12 +25,6 @@ RUN python3 -m pip install Cython --install-option="--no-cython-compile" && \
 	RUN python3 -m pip install Pillow && \
 	set -eux; \
 	\
-# is it correct?
-RUN apk add --no-cache jpeg-dev zlib-dev
-RUN apk add --no-cache --virtual .build-deps build-base linux-headers \
-    && pip install Pillow
-	\
-
 # this "case" statement is generated via "update.sh"
 	dpkgArch="$(dpkg --print-architecture)"; \
 	case "${dpkgArch##*-}" in \
