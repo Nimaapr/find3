@@ -34,13 +34,13 @@ import (
 
 func main() {
 
-	oldName := "/static/img2/org_floorplan1.png"
-	newName := "/static/img2/org_floorplan2.png"
+	// oldName := "/static/img2/org_floorplan1.png"
+	// newName := "/static/img2/org_floorplan2.png"
 
-	erro := os.Rename(oldName, newName)
-	if erro != nil {
-		panic(erro)
-	}
+	// erro := os.Rename(oldName, newName)
+	// if erro != nil {
+	// 	panic(erro)
+	// }
 
 	// go func() {
 	// 	for {
