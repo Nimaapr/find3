@@ -7,7 +7,7 @@ import (
 	"image/draw"
 	// "image/png"
 	"log"
-	// "math/rand"
+	"math/rand"
 	"os"
 	// "os/exec"
 	"path"
@@ -86,7 +86,7 @@ func main() {
 				image.Pt(630, 270),
 				image.Pt(630, 180),
 			}
-			location := 7
+			location := randomInt
 			position := accessPoints[location]
 			draw.Draw(imgRGBA, image.Rect(position.X-10, position.Y-10, position.X+10, position.Y+10),
 				&image.Uniform{color.RGBA{255, 0, 0, 255}}, image.Point{0, 0}, draw.Src)
