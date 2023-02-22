@@ -1340,7 +1340,7 @@ func sendOutData(p models.SensorData) (analysis models.LocationAnalysis, err err
 	p.Family = strings.TrimSpace(strings.ToLower(p.Family))
 
 	// call Python function
-	cmd := exec.Command("python", "FP_update.py", "1", p.Device, analysis.Guesses[0].Location)
+	cmd := exec.Command("python", "FP_update.py", "1", p.Device, strconv.Itoa(analysis.Guesses[0].Location))
 	err = cmd.Run()
 	if err != nil {
 		return

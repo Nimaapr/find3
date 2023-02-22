@@ -37,7 +37,7 @@ func main() {
 			time.Sleep(30 * time.Second)
 			rand.Seed(time.Now().UnixNano())
 			randomInt := rand.Intn(8)
-			cmd := exec.Command("python", "./src/server/FP_update.py", "1", "test", randomInt)
+			cmd := exec.Command("python", "./src/server/FP_update.py", "1", "test", strconv.Itoa(randomInt))
 			err = cmd.Run()
 			if err != nil {
 				log.Println("error running Python script:", err)

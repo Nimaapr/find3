@@ -14,7 +14,7 @@ def show_floorplan(floor_level, device_num, location):
 #   (0.0) = (450, 180)
     access_points = [(450,180),(450,270), (450, 360), (450,450), 
                     (630, 450), (630, 360), (630, 270), (630, 180)]
-    position = access_points[location]
+    position = access_points[int(location)]
     ax.add_patch(plt.Circle(position, radius=10, color='r'))
     ax.annotate(f"Device {device_num}", position, color='r')
     fig.savefig('/static/img2/floorplan{}.png'.format(floor_level))
