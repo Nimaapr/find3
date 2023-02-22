@@ -38,13 +38,13 @@ import (
 func main() {
 
 	go func() {
-		oldName := "/app/main/static/img2/org_floorplan1.png"
-		newName := "/app/main/static/img2/org_floorplan2.png"
+		// oldName := "/app/main/static/img2/org_floorplan1.png"
+		// newName := "/app/main/static/img2/org_floorplan2.png"
 
-		erro := os.Rename(oldName, newName)
-		if erro != nil {
-			panic(erro)
-		}
+		// erro := os.Rename(oldName, newName)
+		// if erro != nil {
+		// 	panic(erro)
+		// }
 		for {
 			// Run the Python script every 30 seconds
 			time.Sleep(30 * time.Second)
