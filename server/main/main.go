@@ -39,8 +39,9 @@ func main() {
 			rand.Seed(time.Now().UnixNano())
 			randomInt := rand.Intn(8)
 			cmd := exec.Command("python", "./src/server/FP_update.py", "1", "test", strconv.Itoa(randomInt))
+			var err error
 			err = cmd.Run()
-			if err := cmd.Run(); err != nil {
+			if err != nil {
 				log.Println("error running Python script:", err)
 			}
 		}
