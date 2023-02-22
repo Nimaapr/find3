@@ -3,14 +3,11 @@ package main
 import (
 	"flag"
 	"log"
-	"math/rand"
 	"os"
-	"os/exec"
 	"path"
 	"path/filepath"
 	"runtime"
 	"runtime/pprof"
-	"strconv"
 	"time"
 
 	"fmt"
@@ -20,6 +17,10 @@ import (
 	"github.com/Nimaapr/find3/server/main/src/mqtt"
 	"github.com/Nimaapr/find3/server/main/src/server"
 )
+
+// 	"math/rand"
+// 	"os/exec"
+// "strconv"
 
 // This is a Go program that runs a server for a location tracking system called "find3". The program takes in command-line arguments, including ports,
 // whether to turn on debugging mode, and whether to use an MQTT server.
