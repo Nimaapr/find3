@@ -52,11 +52,47 @@ func main() {
 			rand.Seed(time.Now().UnixNano())
 			randomInt := rand.Intn(8)
 			// is this path to python file correct? maybe use absolute pass?
-			cmd := exec.Command("python", "/app/main/src/server/FP_update.py", "1", "test", strconv.Itoa(randomInt))
-			var err error
-			err = cmd.Run()
+			// cmd := exec.Command("python", "/app/main/src/server/FP_update.py", "1", "test", strconv.Itoa(randomInt))
+			// var err error
+			// err = cmd.Run()
+			// if err != nil {
+			// 	log.Println("error running Python script:", err)
+			// }
+			floorLevel := 1
+			floorStr := fmt.Sprintf("/app/main/static/img2/org_floorplan%d.png", floorLevel)
+			floorFile, err := os.Open(floorStr)
 			if err != nil {
-				log.Println("error running Python script:", err)
+				return err
+			}
+			defer floorFile.Close()
+			floorImg, _, err := image.Decode(floorFile)
+			if err != nil {
+				return err
+			}
+			imgRect := floorImg.Bounds()
+			imgRGBA := image.NewRGBA(imgRect)
+			draw.Draw(imgRGBA, imgRect, floorImg, image.Point{0, 0}, draw.Src)
+			accessPoints := []image.Point{
+				image.Pt(450, 180),
+				image.Pt(450, 270),
+				image.Pt(450, 360),
+				image.Pt(450, 450),
+				image.Pt(630, 450),
+				image.Pt(630, 360),
+				image.Pt(630, 270),
+				image.Pt(630, 180),
+			}
+			location := 7
+			position := accessPoints[location]
+			draw.Draw(imgRGBA, image.Rect(position.X-10, position.Y-10, position.X+10, position.Y+10),
+				&image.Uniform{color.RGBA{255, 0, 0, 255}}, image.Point{0, 0}, draw.Src)
+			f, err := os.Create(fmt.Sprintf("/app/main/static/img2/floorplan%d.png", floorLevel))
+			if err != nil {
+				return err
+			}
+			defer f.Close()
+			if err = png.Encode(f, imgRGBA); err != nil {
+				return err
 			}
 		}
 	}()
