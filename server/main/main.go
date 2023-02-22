@@ -36,29 +36,30 @@ import (
 
 func main() {
 
-	go func() {
-		for {
-			// oldName := "/app/main/static/img2/org_floorplan1.png"
-			// newName := "/app/main/static/org_floorplan2.png"
+	// this was for test, uncomment next lines to test python file.
+	// go func() {
+	// 	for {
+	// 		// oldName := "/app/main/static/img2/org_floorplan1.png"
+	// 		// newName := "/app/main/static/org_floorplan2.png"
 
-			// erro := os.Rename(oldName, newName)
-			// if erro != nil {
-			// 	panic(erro)
-			// }
+	// 		// erro := os.Rename(oldName, newName)
+	// 		// if erro != nil {
+	// 		// 	panic(erro)
+	// 		// }
 
-			// Run the Python script every 30 seconds
-			time.Sleep(30 * time.Second)
-			rand.Seed(time.Now().UnixNano())
-			randomInt := rand.Intn(8)
-			cmd := exec.Command("python3", "/app/main/src/server/FP_update.py", "1", "test", strconv.Itoa(randomInt))
-			// cmd := exec.Command("python3", "/app/main/src/server/FP_update.py")
-			var err error
-			err = cmd.Run()
-			if err != nil {
-				log.Println("error running Python script:", err)
-			}
-		}
-	}()
+	// 		// Run the Python script every 30 seconds
+	// 		time.Sleep(30 * time.Second)
+	// 		rand.Seed(time.Now().UnixNano())
+	// 		randomInt := rand.Intn(8)
+	// 		cmd := exec.Command("python3", "/app/main/src/server/FP_update.py", "1", "test", strconv.Itoa(randomInt))
+	// 		// cmd := exec.Command("python3", "/app/main/src/server/FP_update.py")
+	// 		var err error
+	// 		err = cmd.Run()
+	// 		if err != nil {
+	// 			log.Println("error running Python script:", err)
+	// 		}
+	// 	}
+	// }()
 
 	aiPort := flag.String("ai", "8002", "port for the AI server")
 	port := flag.String("port", "8003", "port for the data (this) server")
