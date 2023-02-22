@@ -22,10 +22,10 @@ def show_floorplan(floor_level, device_num, location):
     fig.savefig('/app/main/static/img2/floorplan{}.png'.format(floor_level))
     # plt.show()
 
-# floor_level = 1
-# device_num = 12
-# location = 7
-# show_floorplan(floor_level, device_num, location)
+floor_level = 1
+device_num = 12
+location = 7
+show_floorplan(floor_level, device_num, location)
 
 
 # this part for test
