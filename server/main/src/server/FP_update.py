@@ -35,7 +35,7 @@ def show_floorplan(floor_level, device_num, location):
 # floor_level = 1
 # device_num = 12
 # location = 7
-# show_floorplan(floor_level, device_num, location)
+show_floorplan(floor_level, device_num, location)
 
 with open('/app/main/static/img2/empty_file_outside.txt', 'w') as f:
     f.write(floor_level + "\n")
