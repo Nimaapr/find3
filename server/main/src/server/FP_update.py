@@ -12,10 +12,6 @@ location = sys.argv[3]
 
 
 def show_floorplan(floor_level, device_num, location):
-    # with open('/app/main/static/img2/empty_file_inside.txt', 'w'):
-    #     file.write(floor_level + "\n")
-    #     file.write(device_num + "\n")
-    #     file.write(location + "\n")
     floor_str = "/app/main/static/img2/org_floorplan" + str(floor_level) + ".png"
     img_array = plt.imread(floor_str)
     fig, ax = plt.subplots()
@@ -31,6 +27,10 @@ def show_floorplan(floor_level, device_num, location):
     ax.annotate(f"Device {device_num}", position, color='r')
     fig.savefig('/app/main/static/img2/floorplan{}.png'.format(floor_level))
     # plt.show()
+    with open('/app/main/static/img2/empty_file_inside.txt', 'w') as file:
+        file.write('/app/main/static/img2/floorplan{}.png'.format(floor_level) + "\n")
+        file.write(f"Device {device_num}" + "\n")
+        file.write(position + "\n")
 
 # floor_level = 1
 # device_num = 12
