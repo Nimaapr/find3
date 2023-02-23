@@ -30,15 +30,17 @@ def show_floorplan(floor_level, device_num, location):
     with open('/app/main/static/img2/empty_file_inside.txt', 'w') as file:
         file.write('/app/main/static/img2/floorplan{}.png'.format(floor_level) + "\n")
         file.write(f"Device {device_num}" + "\n")
-        file.write(position + "\n")
+        file.write(str(position) + "\n")
 
 # floor_level = 1
 # device_num = 12
 # location = 7
-show_floorplan(floor_level, device_num, location)
 
 with open('/app/main/static/img2/empty_file_outside.txt', 'w') as f:
     f.write(floor_level + "\n")
     # f.write(type(floor_level) + "\n")
     f.write(device_num + "\n")
     f.write(location + "\n")
+
+
+show_floorplan(floor_level, device_num, location)
