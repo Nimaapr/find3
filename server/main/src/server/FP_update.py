@@ -10,7 +10,7 @@ location = sys.argv[3]
 
 
 
-
+# location = location -1 : numbers start from 1.
 def show_floorplan(floor_level, device_num, location):
     floor_str = "/app/main/static/img2/org_floorplan" + str(floor_level) + ".png"
     img_array = plt.imread(floor_str)
@@ -22,7 +22,7 @@ def show_floorplan(floor_level, device_num, location):
 #   (0.0) = (450, 180)
     access_points = [(450,180),(450,270), (450, 360), (450,450), 
                     (630, 450), (630, 360), (630, 270), (630, 180)]
-    position = access_points[int(location)]
+    position = access_points[int(location)-1]
     ax.add_patch(plt.Circle(position, radius=10, color='r'))
     ax.annotate(f"Device {device_num}", position, color='r')
     fig.savefig('/app/main/static/img2/floorplan{}.png'.format(floor_level))
