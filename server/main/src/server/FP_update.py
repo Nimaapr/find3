@@ -42,7 +42,7 @@ with open('/app/main/static/img2/empty_file_outside.txt', 'w') as f:
     # f.write(floor_level + "\n")
     # f.write(type(floor_level) + "\n")
     f.write(device_num + "\n")
-    f.write(location + "\n")
+    f.write(location_all + "\n")
 
 
 show_floorplan(device_num, location_all)
