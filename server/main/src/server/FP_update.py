@@ -4,14 +4,15 @@ import sys
 
 
 # Get the three inputs from command-line arguments
-floor_level = sys.argv[1]
-device_num = sys.argv[2]
-location = sys.argv[3]
+device_num = sys.argv[1]
+location_all = sys.argv[2]
 
 
 
 # location = location -1 : numbers start from 1.
-def show_floorplan(floor_level, device_num, location):
+def show_floorplan(device_num, location_all):
+    floor_level = location_all[:2]
+    location = location_all[2:]
     floor_str = "/app/main/static/img2/org_floorplan" + str(floor_level) + ".png"
     img_array = plt.imread(floor_str)
     fig, ax = plt.subplots()
@@ -25,7 +26,8 @@ def show_floorplan(floor_level, device_num, location):
     position = access_points[int(location)-1]
     ax.add_patch(plt.Circle(position, radius=10, color='r'))
     ax.annotate(f"Device {device_num}", position, color='r')
-    fig.savefig('/app/main/static/img2/floorplan{}.png'.format(floor_level))
+    # fig.savefig('/app/main/static/img2/floorplan{}.png'.format(floor_level))
+    fig.savefig('/app/main/static/img2/floorplan.png')
     # plt.show()
     with open('/app/main/static/img2/empty_file_inside.txt', 'w') as file:
         file.write('/app/main/static/img2/floorplan{}.png'.format(floor_level) + "\n")
@@ -37,10 +39,10 @@ def show_floorplan(floor_level, device_num, location):
 # location = 7
 
 with open('/app/main/static/img2/empty_file_outside.txt', 'w') as f:
-    f.write(floor_level + "\n")
+    # f.write(floor_level + "\n")
     # f.write(type(floor_level) + "\n")
     f.write(device_num + "\n")
     f.write(location + "\n")
 
 
-show_floorplan(floor_level, device_num, location)
+show_floorplan(device_num, location_all)
