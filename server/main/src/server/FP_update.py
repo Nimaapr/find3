@@ -12,7 +12,7 @@ location_all = sys.argv[2]
 # location = location -1 : numbers start from 1.
 def show_floorplan(device_num, location_all):
     floor_level = location_all[:2]
-    location = location_all[2:]
+    location = location_all[2:4]
     floor_str = "/app/main/static/img2/org_floorplan" + str(floor_level) + ".png"
     img_array = plt.imread(floor_str)
     fig, ax = plt.subplots()

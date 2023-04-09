@@ -487,7 +487,17 @@
         if (lastLocation == data.guesses[0].location) {
             entered = " still at "
         }
-        toastr["success"](data.sensors.d + entered + data.guesses[0].location + " (" + Math.round(100 * data.guesses[0].probability) +
+        // Check the last character of the location
+        var lastChar = data.guesses[0].location.slice(-1);
+        var notificationType = "info"; // Default toastr type
+
+        if (lastChar === "s") {
+            notificationType = "success"; // Green notification
+        } else if (lastChar === "d") {
+            notificationType = "error"; // Red notification
+        }
+
+        toastr[notificationType](data.sensors.d + entered + data.guesses[0].location + " (" + Math.round(100 * data.guesses[0].probability) +
             "%)");
     };
 

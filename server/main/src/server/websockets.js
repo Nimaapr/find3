@@ -16,3 +16,6 @@ $(document).ready(function () {
         console.log('connected');
     }
 });
+
+
+// a frontend file that establishes the connection and listens for messages from the server

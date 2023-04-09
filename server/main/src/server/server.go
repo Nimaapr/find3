@@ -28,6 +28,59 @@ var UseSSL = false
 var UseMQTT = false
 var MinimumPassive = -1
 
+// The Run() function is responsible for setting up the server and defining the routes for the application. It uses the Gin web framework to create and configure the server. Here's a brief explanation of the routes and their functionalities:
+// Set up MQTT if enabled.
+// Set up the Gin server, load HTML templates and apply middlewares.
+// HEAD and GET request to /: These handlers serve the login page.
+// POST request to /: This handler processes the login form submission and redirects the user to the dashboard if the family exists.
+// DELETE request to /api/v1/database/:family: This handler deletes the specified family's database.
+// DELETE request to /api/v1/location/:family/:location: This handler deletes a specific location for the given family.
+// GET request to /view/analysis/:family: This handler serves the analysis page for a specific family, showing the list of locations.
+// GET request to /view/location_analysis/:family/:location: This handler serves a PNG image of the location analysis for the specified family and location.
+// GET request to /view/location/:family/:device: This handler serves the location page for a specific family and device.
+// GET request to /view/map2/:family: This handler serves an alternative map view for the specified family, showing the locations with GPS coordinates on a map.
+// GET request to /view/map/:family: This handler serves the map view for the specified family, showing the locations with GPS coordinates on a map.
+// r.GET("/api/v1/database/:family", ...) - This route retrieves and returns the dumped database for a specified family.
+// r.GET("/api/v1/data/:family", ...) - This route returns all sensor data for a specified family, used for classification purposes.
+// r.GET("/view/gps/:family", ...) - This route returns an HTML template containing GPS data for a specified family, including average latitude and longitude.
+// r.GET("/view/dashboard/:family", ...) - This route renders a dashboard view for a specified family, including efficacy, device data, location data, and related settings.
+
+//The following routes are used for handling different API requests related to devices, locations, calibration, and efficacy:
+// r.OPTIONS("/api/v1/devices/*family", ...)
+// r.GET("/api/v1/devices/*family", ...)
+// r.OPTIONS("/api/v1/location/:family/*device", ...)
+// r.GET("/api/v1/location/:family/*device", ...)
+// r.OPTIONS("/api/v1/locations/:family", ...)
+// r.GET("/api/v1/locations/:family", ...)
+// r.OPTIONS("/api/v1/location_basic/:family/*device", ...)
+// r.GET("/api/v1/location_basic/:family/*device", ...)
+// r.OPTIONS("/api/v1/by_location/:family", ...)
+// r.GET("/api/v1/by_location/:family", ...)
+// r.OPTIONS("/api/v1/calibrate/*family", ...)
+// r.GET("/api/v1/calibrate/*family", ...)
+// r.OPTIONS("/api/v1/settings/passive", ...)
+// r.POST("/api/v1/settings/passive", ...)
+// r.OPTIONS("/api/v1/efficacy/:family", ...)
+// r.GET("/api/v1/efficacy/:family", ...)
+
+// Some additional routes for handling various test and utility requests are also included, such as:
+// r.GET("/ping", ...)
+// r.GET("/now", ...)
+// r.GET("/test", ...)
+// r.GET("/ws", ...)
+
+// If MQTT is enabled, the following route is added:
+// r.GET("/api/v1/mqtt/:family", ...)
+
+// Finally, several routes handle data submission and processing:
+// r.POST("/api/v1/gps", ...)
+// r.POST("/data", ...)
+// r.POST("/classify", ...)
+// r.POST("/passive", ...)
+// r.POST("/learn", ...)
+// r.POST("/track", ...)
+
+// The server listens on the specified port (0.0.0.0:Port), and any errors that occur during execution are logged.
 // Run will start the server listening on the specified port
 func Run() (err error) {
 	defer logger.Log.Flush()
@@ -582,10 +635,15 @@ func Run() (err error) {
 	return
 }
 
+// This function, replace, is a simple helper function that wraps the strings.Replace function from the standard Go strings package. It takes three string arguments: input, from, and to. It searches the input string for occurrences of the from string and replaces them with the to string.
+// The fourth argument for strings.Replace is set to -1, which means that all occurrences of the from string will be replaced with the to string, without any limit.
 func replace(input, from, to string) string {
 	return strings.Replace(input, from, to, -1)
 }
 
+// This is a simple function called ping that takes a single argument, c, which is a pointer to an instance of gin.Context. The gin.Context is a part of the Gin web framework, which is a popular HTTP web framework for building APIs in Go.
+// The ping function sends a response with an HTTP status code of http.StatusOK (which represents a 200 OK status) and a string body "pong". This function is typically used as a simple health check or "ping-pong" endpoint for an API, allowing clients to check if the server is running and responsive.
+// In short, when a client sends a request to this endpoint, it will receive a 200 OK status and the string "pong" in the response body, indicating that the server is up and running.
 func ping(c *gin.Context) {
 	c.String(http.StatusOK, "pong")
 }
@@ -842,6 +900,14 @@ func handlerApiV1Calibrate(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": message, "success": err == nil})
 }
 
+// This is a handlerMQTT function that handles an HTTP request in a Gin web framework context. The function takes a single argument, c, which is a pointer to a gin.Context object. Here's a brief explanation of the function:
+// The function defines an anonymous function that takes a *gin.Context argument and returns a message string and an err error. This anonymous function is immediately invoked with the c argument.
+// Inside the anonymous function, it first retrieves a URL parameter called "family" and trims and converts it to lowercase. If the "family" parameter is empty, it returns an "invalid family" error.
+// If the "family" parameter is valid, it calls the mqtt.AddFamily function with the "family" parameter. This function presumably adds a new MQTT family and returns a passphrase associated with that family, as well as an error if there's a problem.
+// If there's an error, the anonymous function returns the error. Otherwise, it returns a message containing the family name and the generated passphrase.
+// The handlerMQTT function then checks if there was an error. If there was an error, it sends a JSON response with an HTTP status code of http.StatusOK (200 OK), along with a message containing the error and a "success" field set to false.
+// If there was no error, it sends a JSON response with an HTTP status code of http.StatusOK, along with a message containing the success message and a "success" field set to true.
+// In summary, the handlerMQTT function processes a request to add a new MQTT family, generates a passphrase for that family, and returns an appropriate JSON response to the client.
 func handlerMQTT(c *gin.Context) {
 	message, err := func(c *gin.Context) (message string, err error) {
 		family := strings.ToLower(strings.TrimSpace(c.Param("family")))
@@ -864,6 +930,7 @@ func handlerMQTT(c *gin.Context) {
 	return
 }
 
+// sendOutLocation(family, device string): This function retrieves the latest sensor data for a specific device and family, sends it out for analysis, and returns the analyzed data.
 func sendOutLocation(family, device string) (s models.SensorData, analysis models.LocationAnalysis, err error) {
 	d, err := database.Open(family, true)
 	if err != nil {
@@ -981,6 +1048,7 @@ func handlerGPS(c *gin.Context) {
 	}
 }
 
+// handlerDataClassify(c *gin.Context): This function is an HTTP handler for a request to classify data. It reads the sensor data from the request, validates and processes it, and then analyzes it using the api.AnalyzeSensorData function. Finally, it sends a JSON response containing the analysis results.
 func handlerDataClassify(c *gin.Context) {
 	aidata, message, err := func(c *gin.Context) (aidata models.LocationAnalysis, message string, err error) {
 		var d models.SensorData
@@ -1300,6 +1368,20 @@ func processSensorData(p models.SensorData, justSave ...bool) (err error) {
 	go sendOutData(p)
 	return
 }
+
+// sendOutData(p models.SensorData): This function takes sensor data, analyzes it, and sends the data and analysis results to the Android device using WebSockets and MQTT (if enabled).
+
+// This sendOutData function processes sensor data, analyzes it, and sends the data along with the analysis results to an Android device using WebSockets and MQTT (if enabled). The function takes one argument, p, which is of type models.SensorData.
+// It returns an object of type models.LocationAnalysis and an error, err. Here's a step-by-step explanation:
+// The function calls api.AnalyzeSensorData(p) to analyze the provided sensor data. The result is stored in the analysis variable.
+// If there are no guesses in the analysis.Guesses, it returns an error with the message "no guesses".
+// A struct type called Payload is defined, containing the fields Sensors, Guesses, Location, and Time.
+// GPS data is fetched for the p.Family using the api.GetGPSData(p.Family) function. If there's a valid GPS location for the top guess (analysis.Guesses[0].Location), it updates the p.GPS fields with the latitude and longitude. Otherwise, it sets the p.GPS fields to -1.
+// A payload object is created using the Payload struct, which includes the sensor data, guesses, top-guess location, and timestamp.
+// The payload object is then marshaled into a JSON byte slice bTarget using the json.Marshal function.
+// The family name is cleaned up by trimming spaces and converting it to lowercase.
+// The JSON payload is sent over WebSockets to the specific device and to all devices using the SendMessageOverWebsockets function.
+// If the UseMQTT flag is set to true, the JSON payload is published over MQTT using the mqtt.Publish function.
 
 func sendOutData(p models.SensorData) (analysis models.LocationAnalysis, err error) {
 	analysis, _ = api.AnalyzeSensorData(p)
