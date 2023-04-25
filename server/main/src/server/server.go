@@ -993,7 +993,8 @@ func handlerData(c *gin.Context) {
 		// }
 
 		// call Python function
-		cmd := exec.Command("python3", "/app/main/src/server/Kalman_filter.py", d.Family, d.Sensors)
+		sensorsJSON, err := json.Marshal(d.Sensors)
+		cmd := exec.Command("python3", "/app/main/src/server/Kalman_filter.py", d.Family, string(sensorsJSON))
 		err = cmd.Run()
 		if err != nil {
 			return

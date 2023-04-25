@@ -1,8 +1,8 @@
 import sys
-
+import json
 
 device_num = sys.argv[1]
-location_all = sys.argv[2]
+location_all = json.loads(sys.argv[2])
 
 
 with open('/app/main/static/img2/kalmanfilter2.txt', 'w') as f:
