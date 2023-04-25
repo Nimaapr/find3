@@ -971,6 +971,34 @@ func handlerData(c *gin.Context) {
 			return
 		}
 
+		// // Call the Python script to apply the Kalman filter to the received data
+		// json_data, err := json.Marshal(d)
+		// if err != nil {
+		// 	// Handle the error
+		// }
+
+		// cmd := exec.Command("python3", "/app/main/src/server/Kalman_filter.py")
+		// cmd.Stdin = strings.NewReader(string(json_data))
+		// var out bytes.Buffer
+		// cmd.Stdout = &out
+		// err = cmd.Run()
+		// if err != nil {
+		// 	// Handle the error
+		// }
+
+		// // Parse the filtered JSON data back into the SensorData struct
+		// err = json.Unmarshal(out.Bytes(), &d)
+		// if err != nil {
+		// 	// Handle the error
+		// }
+
+		// call Python function
+		cmd := exec.Command("python3", "/app/main/src/server/Kalman_filter.py", d.Family, d.Sensors)
+		err = cmd.Run()
+		if err != nil {
+			return
+		}
+
 		err = d.Validate()
 		if err != nil {
 			message = d.Family
@@ -990,7 +1018,6 @@ func handlerData(c *gin.Context) {
 		logger.Log.Debugf("[%s] /data %+v", d.Family, d)
 		return
 	}(c)
-
 	if err != nil {
 		logger.Log.Debugf("[%s] problem parsing: %s", message, err.Error())
 		c.JSON(http.StatusOK, gin.H{"message": err.Error(), "success": false})
@@ -1355,6 +1382,15 @@ func handlerFIND(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"message": message, "success": true})
 	}
 }
+
+// The processSensorData function is responsible for processing and handling the sensor data provided to it as an input parameter (p models.SensorData). It takes two arguments:
+// p models.SensorData: The sensor data to be processed, which is an instance of the models.SensorData struct.
+// justSave ...bool: A variadic parameter that, if provided and set to true, indicates that the function should only save the sensor data and not perform any further processing.
+
+// The function performs the following steps:
+// It calls the api.SaveSensorData(p) function to save the sensor data p. If there is an error during saving, the function returns the error.
+// It checks whether the justSave parameter is provided and set to true. If so, it returns immediately without performing any further processing.
+// If the justSave parameter is not set to true or not provided, it calls the sendOutData(p) function in a new goroutine. This function is responsible for further processing of the sensor data
 
 func processSensorData(p models.SensorData, justSave ...bool) (err error) {
 	err = api.SaveSensorData(p)

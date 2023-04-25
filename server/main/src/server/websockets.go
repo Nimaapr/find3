@@ -10,6 +10,24 @@ import (
 	"github.com/gorilla/websocket"
 )
 
+// This is a Go code implementing a simple WebSocket server using the Gin Web Framework and Gorilla WebSocket library.
+// The purpose of this server is to handle WebSocket connections and send messages to connected clients.
+// Let's break down the important parts of this code:
+
+// Import necessary packages.
+// Define wsupgrader, an instance of websocket.Upgrader, which helps to upgrade an HTTP connection to a WebSocket connection.
+// Define the Websockets struct, which contains a map of WebSocket connections and a Mutex for synchronization.
+// Initialize the ws variable of type Websockets and set up the connections map in the init function.
+// Implement the wshandler function, which is the main WebSocket handler. It checks for the required query parameters, upgrades the HTTP connection to a
+// WebSocket connection, and adds the connection to the map of connections. It also starts two Goroutines: sendOutLocation and websocketListener.
+// Implement the websocketListener function, which listens for incoming messages on the WebSocket connection. If there's an error, it removes
+// the connection from the map of connections.
+// Implement the SendMessageOverWebsockets function, which sends a message to all connected clients for a given family and device. The function iterates over
+// the connections map and writes the message to each connection.
+
+// In summary, this code sets up a simple WebSocket server that allows clients to connect and receive messages.
+// The server maintains a map of connected clients and can send messages to all clients related to a specific family and device.
+
 var wsupgrader = websocket.Upgrader{
 	ReadBufferSize:  1024,
 	WriteBufferSize: 1024,
@@ -86,7 +104,7 @@ func websocketListener(family string, device string, conn *websocket.Conn) {
 	}
 }
 
-//  SendMessageOverWebsockets will send a message over the websockets
+// SendMessageOverWebsockets will send a message over the websockets
 func SendMessageOverWebsockets(family string, device string, msg []byte) (err error) {
 	ws.Lock()
 	defer ws.Unlock()
