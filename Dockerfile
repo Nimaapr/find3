@@ -15,6 +15,7 @@ RUN python3 -m pip install Cython --install-option="--no-cython-compile" && \
 	mkdir /usr/local/work && \
 	rm -rf /var/lib/apt/lists/* && \
 	RUN python3 -m pip install Pillow && \
+	RUN python3 -m pip install pykalman && \
 	set -eux; \
 	\
 # this "case" statement is generated via "update.sh"

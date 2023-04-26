@@ -999,6 +999,7 @@ func handlerData(c *gin.Context) {
 		if err != nil {
 			return
 		}
+		output, err := cmd.Output()
 
 		err = d.Validate()
 		if err != nil {
