@@ -999,7 +999,13 @@ func handlerData(c *gin.Context) {
 		if err != nil {
 			return
 		}
-		// output, err := cmd.Output()
+		output, err := cmd.Output()
+
+		cmd = exec.Command("python3", "/app/main/src/server/pytest.py", string(output))
+		err = cmd.Run()
+		if err != nil {
+			return
+		}
 
 		err = d.Validate()
 		if err != nil {
