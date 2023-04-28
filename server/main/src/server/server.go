@@ -995,13 +995,22 @@ func handlerData(c *gin.Context) {
 		// call Python function
 		sensorsJSON, err := json.Marshal(d.Sensors)
 		cmd := exec.Command("python3", "/app/main/src/server/Kalman_filter.py", d.Family, string(sensorsJSON))
-		err = cmd.Run()
+
+		output, err := cmd.CombinedOutput()
 		if err != nil {
 			return
 		}
-		output, err := cmd.Output()
 
-		cmd = exec.Command("python3", "/app/main/src/server/pytest.py", string(output))
+		var modifiedSensors map[string]map[string]interface{}
+		err = json.Unmarshal(output, &modifiedSensors)
+		if err != nil {
+			return "", err
+		}
+
+		d.Sensors = modifiedSensors
+
+		sensorsJSON, err = json.Marshal(d.Sensors)
+		cmd = exec.Command("python3", "/app/main/src/server/pytest.py", string(sensorsJSON))
 		err = cmd.Run()
 		if err != nil {
 			return
