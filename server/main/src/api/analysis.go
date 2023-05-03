@@ -60,6 +60,26 @@ type AnalysisResponse struct {
 	Success bool                    `json:"success"`
 }
 
+// The AnalyzeSensorData function is responsible for analyzing the given sensor data (s models.SensorData) and returning the location analysis data (aidata models.LocationAnalysis). It performs the following steps:
+// 1. Initialize aidata and its fields.
+// 2. Create two channels (aChan and bChan) and two corresponding goroutines to perform two different analysis tasks concurrently.
+// 2.1 The first goroutine (aChan) is responsible for:
+// 2.1.1 Sending a POST request with the sensor data to an AI server (likely a machine learning model) running at http://localhost:<AIPort>/classify.
+// 2.1.2 Decoding the response and checking if it was successful or not.
+// 2.1.2 Sending the analysis result or error through the aChan channel.
+// 2.2 The second goroutine (bChan) is responsible for:
+// 2.2.1 Performing a Naive Bayes1 classification on the sensor data.
+// 2.2.2 Sending the classification result or error through the bChan channel.
+// 3. Wait for and receive the results from the first goroutine through the aChan channel. If there is an error or no predictions, log the error and return. Otherwise, update aidata with the received data.
+// 4. Create a reverse mapping of aidata.LocationNames to map location names back to their original keys.
+// 5. Wait for and receive the results from the second goroutine through the bChan channel. If there is no error, update aidata with the Naive Bayes1 classification results. Otherwise, log a warning message.
+// 6. Open the database for the given sensor data family, and retrieve the algorithm efficacy information.
+// 7. Determine the best guess for the location based on the algorithm efficacy and update aidata.Guesses.
+// 8. If the location is unknown, update aidata.Guesses to indicate an unknown location.
+// 9. In a new goroutine, add the prediction to the database asynchronously.
+// 10. Log the total analysis time and return aidata and any error that occurred during the analysis process.
+// In summary, the AnalyzeSensorData function analyzes the given sensor data using two different methods (AI server and Naive Bayes1 classification) concurrently, combines the results, and returns the location analysis data. It also stores the prediction in the database asynchronously.
+
 func AnalyzeSensorData(s models.SensorData) (aidata models.LocationAnalysis, err error) {
 	startAnalyze := time.Now()
 
