@@ -27,8 +27,8 @@ def apply_kalman_filter(data):
     # Apply the Kalman filter to the bluetooth data
     for key, rssi in bluetooth_data.items():
         measurements = np.array([rssi])
-        filtered_values = [0]
-        # filtered_values = measurements
+        # filtered_values = [0]
+        filtered_values = measurements
         # filtered_values, _ = kf.filter(measurements)
         bluetooth_data[key] = float(filtered_values[-1])
 

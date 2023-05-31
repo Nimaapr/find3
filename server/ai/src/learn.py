@@ -1,5 +1,22 @@
 #!/usr/bin/python3
 
+# Logging: The script starts by setting up a logger named "learn" which writes log messages to both a file named 'learn.log' and to the console. This will be used throughout the script to log important information and errors.
+# Decorators: It then defines a decorator timeout which wraps a function in such a way that if the function does not complete within a specified time (in seconds), it raises an exception.
+
+# AI class: Then it defines a class AI. This class appears to be an artificial intelligence model manager with several methods:
+# __init__: Initializes the AI object with basic properties and a logger.
+# classify: Classifies given sensor data using different algorithms stored in the AI object and returns a payload with the predictions of each algorithm.
+# do_classification: Helper function to classify a reshaped sensor data using a specific algorithm. The results are stored in a class variable.
+# train: Uses a classifier to train a model on given data. This method is decorated with the timeout decorator.
+# learn: Loads data from a CSV file, prepares the data, then trains several different models on that data.
+# save and load: Save and load the AI's state (header, naming, algorithms, and family) to/from a gzipped file.
+
+# Cluster Analysis: The do function which loads an AI instance and then applies various clustering algorithms to its data. It also captures warnings to prevent them from being printed to the console. It then checks the results of the clustering algorithms by comparing the predicted groups (clusters) to known groups.
+
+
+
+
+
 import json
 import csv
 from random import shuffle

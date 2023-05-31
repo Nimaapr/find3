@@ -992,7 +992,7 @@ func handlerData(c *gin.Context) {
 		// 	// Handle the error
 		// }
 
-		// call Python function
+		// call Python function for Kalman filter
 		sensorsJSON, err := json.Marshal(d.Sensors)
 		cmd := exec.Command("python3", "/app/main/src/server/Kalman_filter.py", d.Family, string(sensorsJSON))
 
@@ -1009,6 +1009,7 @@ func handlerData(c *gin.Context) {
 
 		d.Sensors = modifiedSensors
 
+		// test python file just to print sensors
 		sensorsJSON, err = json.Marshal(d.Sensors)
 		cmd = exec.Command("python3", "/app/main/src/server/pytest.py", string(sensorsJSON))
 		err = cmd.Run()
