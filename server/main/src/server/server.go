@@ -971,32 +971,28 @@ func handlerData(c *gin.Context) {
 			return
 		}
 
-		// // Call the Python script to apply the Kalman filter to the received data
-		// json_data, err := json.Marshal(d)
-		// if err != nil {
-		// 	// Handle the error
-		// }
-
-		// cmd := exec.Command("python3", "/app/main/src/server/Kalman_filter.py")
-		// cmd.Stdin = strings.NewReader(string(json_data))
-		// var out bytes.Buffer
-		// cmd.Stdout = &out
-		// err = cmd.Run()
-		// if err != nil {
-		// 	// Handle the error
-		// }
-
-		// // Parse the filtered JSON data back into the SensorData struct
-		// err = json.Unmarshal(out.Bytes(), &d)
-		// if err != nil {
-		// 	// Handle the error
-		// }
-
-		// call Python function for Kalman filter
+		// call Python function for processing equipment
 		sensorsJSON, err := json.Marshal(d.Sensors)
-		cmd := exec.Command("python3", "/app/main/src/server/Kalman_filter.py", d.Family, string(sensorsJSON))
+		cmd := exec.Command("python3", "/app/main/src/server/Equipment_tracking.py", d.Family, string(sensorsJSON))
 
 		output, err := cmd.CombinedOutput()
+		if err != nil {
+			return
+		}
+
+		var modifiedSensors map[string]map[string]interface{}
+		err = json.Unmarshal(output, &modifiedSensors)
+		if err != nil {
+			return "", err
+		}
+
+		d.Sensors = modifiedSensors
+
+		// call Python function for Kalman filter
+		sensorsJSON, err = json.Marshal(d.Sensors)
+		cmd = exec.Command("python3", "/app/main/src/server/Kalman_filter.py", d.Family, string(sensorsJSON))
+
+		output, err = cmd.CombinedOutput()
 		if err != nil {
 			return
 		}
