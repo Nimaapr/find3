@@ -1007,7 +1007,7 @@ func handlerData(c *gin.Context) {
 
 		// test python file just to print sensors
 		sensorsJSON, err = json.Marshal(d.Sensors)
-		cmd = exec.Command("python3", "/app/main/src/server/pytest.py", d.Family, string(sensorsJSON), d.Timestamp, d.Device, d.Location)
+		cmd = exec.Command("python3", "/app/main/src/server/pytest.py", d.Family, string(sensorsJSON), string(d.Timestamp), d.Device, d.Location)
 		err = cmd.Run()
 		if err != nil {
 			return
