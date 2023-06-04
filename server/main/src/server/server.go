@@ -973,7 +973,7 @@ func handlerData(c *gin.Context) {
 
 		// call Python function for processing equipment
 		sensorsJSON, err := json.Marshal(d.Sensors)
-		cmd := exec.Command("python3", "/app/main/src/server/Eq_process.py", d.Family, string(sensorsJSON))
+		cmd := exec.Command("python3", "/app/main/src/server/Eq_process.py", d.Family, string(sensorsJSON), string(d.Timestamp), d.Device, d.Location)
 
 		output, err := cmd.CombinedOutput()
 		if err != nil {
