@@ -2,7 +2,7 @@ import sys
 import json
 import sqlite3
 
-# next steps: write time and other info of equipment sensor data
+
 family = sys.argv[1]
 sensors = sys.argv[2]
 timestamp = sys.argv[3]
@@ -22,17 +22,17 @@ def process_data(data):
     # Extract the bluetooth data
     bluetooth_data = data["bluetooth"]
 
-    modified_bluetooth = {}
-    for key, value in bluetooth_data.items():
-        if key.startswith("St"):
-            modified_bluetooth[key] = value
-        elif key.startswith("Eq"):
-            # Insert into SQLite database
-            c.execute("INSERT INTO Eq_beacons VALUES (?, ?, ?, ?, ?, ?)", 
-                      (timestamp, family, device, location, key, value))
-            conn.commit()
+    # modified_bluetooth = {}
+    # for key, value in bluetooth_data.items():
+    #     if key.startswith("St"):
+    #         modified_bluetooth[key] = value
+    #     elif key.startswith("Eq"):
+    #         # Insert into SQLite database
+    #         c.execute("INSERT INTO Eq_beacons VALUES (?, ?, ?, ?, ?, ?)", 
+    #                   (timestamp, family, device, location, key, value))
+    #         conn.commit()
 
-    data["bluetooth"] = modified_bluetooth
+    # data["bluetooth"] = modified_bluetooth
     return data
 
 sensor_data = json.loads(sensors)
@@ -44,6 +44,10 @@ print(processed_json)
 
 # Close the connection to the SQLite database
 conn.close()
+
+
+
+
 
 
 
