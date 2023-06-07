@@ -1050,6 +1050,15 @@ func handlerData(c *gin.Context) {
 		if len(stationSensors) == 0 {
 			return
 		}
+		// *****************************
+
+		err = processSensorData(d, justSave)
+		if err != nil {
+			message = d.Family
+			return
+		}
+
+		//***************************************
 		// test python file just to print sensors
 		sensorsJSON, err = json.Marshal(d.Sensors)
 		cmd = exec.Command("python3", "/app/main/src/server/pytest.py", d.Family, string(sensorsJSON), timestampStr, d.Device, d.Location)
@@ -1058,14 +1067,8 @@ func handlerData(c *gin.Context) {
 			fmt.Println(err)
 			return
 		}
+		//***************************************
 
-		// *****************************
-
-		err = processSensorData(d, justSave)
-		if err != nil {
-			message = d.Family
-			return
-		}
 		message = "inserted data"
 
 		logger.Log.Debugf("[%s] /data %+v", d.Family, d)
