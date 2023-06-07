@@ -1041,6 +1041,8 @@ func handlerData(c *gin.Context) {
 
 			// Force justSave to be true for equipment data
 			err = processSensorData(equipmentData, true)
+			// why not call api here?
+			// err = api.SaveSensorData(equipmentData)
 			if err != nil {
 				return
 			}
@@ -1476,6 +1478,16 @@ func processSensorData(p models.SensorData, justSave ...bool) (err error) {
 // If the UseMQTT flag is set to true, the JSON payload is published over MQTT using the mqtt.Publish function.
 
 func sendOutData(p models.SensorData) (analysis models.LocationAnalysis, err error) {
+	//***************************************
+	// test python file just to print sensors
+	sensorsJSON, err := json.Marshal(p.Sensors)
+	cmd := exec.Command("python3", "/app/main/src/server/sendouttest.py", p.Family, string(sensorsJSON))
+	err := cmd.Run()
+	if err != nil {
+		// fmt.Println(err)
+		return
+	}
+	//***************************************
 	analysis, _ = api.AnalyzeSensorData(p)
 	if len(analysis.Guesses) == 0 {
 		err = errors.New("no guesses")
