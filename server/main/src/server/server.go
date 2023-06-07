@@ -1006,15 +1006,6 @@ func handlerData(c *gin.Context) {
 
 		d.Sensors = modifiedSensors
 
-		// test python file just to print sensors
-		sensorsJSON, err = json.Marshal(d.Sensors)
-		cmd = exec.Command("python3", "/app/main/src/server/pytest.py", d.Family, string(sensorsJSON), timestampStr, d.Device, d.Location)
-		err = cmd.Run()
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
-
 		err = d.Validate()
 		if err != nil {
 			message = d.Family
@@ -1056,9 +1047,18 @@ func handlerData(c *gin.Context) {
 		}
 		// Continue processing with station data
 		d.Sensors = stationSensors
-		if len(stationSensors) < 0 {
+		if len(stationSensors) == 0 {
 			return
 		}
+		// test python file just to print sensors
+		sensorsJSON, err = json.Marshal(d.Sensors)
+		cmd = exec.Command("python3", "/app/main/src/server/pytest.py", d.Family, string(sensorsJSON), timestampStr, d.Device, d.Location)
+		err = cmd.Run()
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+
 		// *****************************
 
 		err = processSensorData(d, justSave)
