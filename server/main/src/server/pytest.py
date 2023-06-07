@@ -12,7 +12,7 @@ location = sys.argv[5]
 
 
 
-with open('/app/main/static/img2/pytest.txt', 'a') as f:
+with open('/app/main/static/img2/pytest.txt', 'w') as f:
         f.write(family + "\n")
         f.write(sensors + "\n")
         f.write(timestamp + "\n")
