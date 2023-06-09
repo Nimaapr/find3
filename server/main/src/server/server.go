@@ -1019,18 +1019,19 @@ func handlerData(c *gin.Context) {
 		// *****************************
 		// Separate equipment data
 		logger.Log.Debugf("seperating data!")
-		var equipmentSensors map[string]map[string]interface{}
-		var stationSensors map[string]map[string]interface{}
+		var equipmentSensors map[string]map[string]interface{} = make(map[string]map[string]interface{})
+		var stationSensors map[string]map[string]interface{} = make(map[string]map[string]interface{})
 
 		for sensor, data := range d.Sensors {
 			if strings.HasPrefix(sensor, "Eq") {
-				logger.Log.Debugf("[%s] /equipment foung ", sensor)
+				logger.Log.Debugf("[%s] /equipment found", sensor)
 				equipmentSensors[sensor] = data
 			} else if strings.HasPrefix(sensor, "St") {
 				logger.Log.Debugf("[%s] /station found", sensor)
 				stationSensors[sensor] = data
 			}
 		}
+		logger.Log.Debugf("debug after seperating data!")
 		// Save equipment data
 		if len(equipmentSensors) > 0 {
 			equipmentData := models.SensorData{
