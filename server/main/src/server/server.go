@@ -1482,7 +1482,7 @@ func sendOutData(p models.SensorData) (analysis models.LocationAnalysis, err err
 	// test python file just to print sensors
 	sensorsJSON, err := json.Marshal(p.Sensors)
 	cmd := exec.Command("python3", "/app/main/src/server/sendouttest.py", p.Family, string(sensorsJSON))
-	err := cmd.Run()
+	err = cmd.Run()
 	if err != nil {
 		// fmt.Println(err)
 		return
@@ -1535,7 +1535,7 @@ func sendOutData(p models.SensorData) (analysis models.LocationAnalysis, err err
 	}
 
 	// call Python function
-	cmd := exec.Command("python3", "/app/main/src/server/FP_update.py", p.Device, analysis.Guesses[0].Location)
+	cmd = exec.Command("python3", "/app/main/src/server/FP_update.py", p.Device, analysis.Guesses[0].Location)
 	err = cmd.Run()
 	if err != nil {
 		return
