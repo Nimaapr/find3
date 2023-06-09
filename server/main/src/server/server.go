@@ -1018,13 +1018,16 @@ func handlerData(c *gin.Context) {
 
 		// *****************************
 		// Separate equipment data
+		logger.Log.Debugf("seperating data!")
 		var equipmentSensors map[string]map[string]interface{}
 		var stationSensors map[string]map[string]interface{}
 
 		for sensor, data := range d.Sensors {
 			if strings.HasPrefix(sensor, "Eq") {
+				logger.Log.Debugf("[%s] /equipment foung ", sensor)
 				equipmentSensors[sensor] = data
 			} else if strings.HasPrefix(sensor, "St") {
+				logger.Log.Debugf("[%s] /station found", sensor)
 				stationSensors[sensor] = data
 			}
 		}
@@ -1485,7 +1488,7 @@ func sendOutData(p models.SensorData) (analysis models.LocationAnalysis, err err
 	err = cmd.Run()
 	if err != nil {
 		// fmt.Println(err)
-		return
+		// return
 	}
 	//***************************************
 	analysis, _ = api.AnalyzeSensorData(p)
