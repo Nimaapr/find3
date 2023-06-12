@@ -1016,47 +1016,47 @@ func handlerData(c *gin.Context) {
 		// process data
 		d.Family = strings.TrimSpace(strings.ToLower(d.Family))
 
-		// *****************************
-		// Separate equipment data
-		logger.Log.Debugf("seperating data!")
-		var equipmentSensors map[string]map[string]interface{} = make(map[string]map[string]interface{})
-		var stationSensors map[string]map[string]interface{} = make(map[string]map[string]interface{})
+		// // *****************************
+		// // Separate equipment data
+		// logger.Log.Debugf("seperating data!")
+		// var equipmentSensors map[string]map[string]interface{} = make(map[string]map[string]interface{})
+		// var stationSensors map[string]map[string]interface{} = make(map[string]map[string]interface{})
 
-		for sensor, data := range d.Sensors {
-			if strings.HasPrefix(sensor, "Eq") {
-				logger.Log.Debugf("[%s] /equipment found", sensor)
-				equipmentSensors[sensor] = data
-			} else if strings.HasPrefix(sensor, "St") {
-				logger.Log.Debugf("[%s] /station found", sensor)
-				stationSensors[sensor] = data
-			}
-		}
-		logger.Log.Debugf("debug after seperating data!")
-		// Save equipment data
-		if len(equipmentSensors) > 0 {
-			equipmentData := models.SensorData{
-				Timestamp: d.Timestamp,
-				Family:    d.Family + "equipment", // append "equipment" to family name
-				Device:    d.Device,
-				Location:  d.Location,
-				Sensors:   equipmentSensors,
-				GPS:       d.GPS,
-			}
+		// for sensor, data := range d.Sensors {
+		// 	if strings.HasPrefix(sensor, "Eq") {
+		// 		logger.Log.Debugf("[%s] /equipment found", sensor)
+		// 		equipmentSensors[sensor] = data
+		// 	} else if strings.HasPrefix(sensor, "St") {
+		// 		logger.Log.Debugf("[%s] /station found", sensor)
+		// 		stationSensors[sensor] = data
+		// 	}
+		// }
+		// logger.Log.Debugf("debug after seperating data!")
+		// // Save equipment data
+		// if len(equipmentSensors) > 0 {
+		// 	equipmentData := models.SensorData{
+		// 		Timestamp: d.Timestamp,
+		// 		Family:    d.Family + "equipment", // append "equipment" to family name
+		// 		Device:    d.Device,
+		// 		Location:  d.Location,
+		// 		Sensors:   equipmentSensors,
+		// 		GPS:       d.GPS,
+		// 	}
 
-			// Force justSave to be true for equipment data
-			err = processSensorData(equipmentData, true)
-			// why not call api here?
-			// err = api.SaveSensorData(equipmentData)
-			if err != nil {
-				return
-			}
-		}
-		// Continue processing with station data
-		d.Sensors = stationSensors
-		if len(stationSensors) == 0 {
-			return
-		}
-		// *****************************
+		// 	// Force justSave to be true for equipment data
+		// 	err = processSensorData(equipmentData, true)
+		// 	// why not call api here?
+		// 	// err = api.SaveSensorData(equipmentData)
+		// 	if err != nil {
+		// 		return
+		// 	}
+		// }
+		// // Continue processing with station data
+		// d.Sensors = stationSensors
+		// if len(stationSensors) == 0 {
+		// 	return
+		// }
+		// // *****************************
 
 		err = processSensorData(d, justSave)
 		if err != nil {
