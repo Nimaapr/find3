@@ -5,29 +5,40 @@
 # ask GPT: write the first python code, write the type of sensor, write the call function from Go. tell that just want equ with PPE name to check distance.
 
 
-import sqlite3
+import csv
+import datetime
 
-# Connect to SQLite database
-conn = sqlite3.connect('Eq_beacons.db')
-c = conn.cursor()
 
-# Select all records from the Eq_beacons table
-c.execute("SELECT * FROM Eq_beacons")
+family = sys.argv[1]
+sensors = sys.argv[2]
+device = sys.argv[4]
+location = sys.argv[5]
 
-# Fetch all rows from the last executed SELECT statement
-rows = c.fetchall()
 
-# Iterate over each row
-for row in rows:
-    timestamp = row[0]
-    family = row[1]
-    device = row[2]
-    location = row[3]
-    beacon = row[4]
-    value = row[5]
-    
-    # Now you can process the data as you need.
-    # print(f'Timestamp: {timestamp}, Family: {family}, Device: {device}, Location: {location}, Beacon: {beacon}, Value: {value}')
 
-# Close the connection to the SQLite database
-conn.close()
+def filter_data(device_name):
+    # Get current time
+    current_time = datetime.datetime.now()
+
+    # Open the CSV file
+    with open('Eq_beacons.csv', 'r') as csvfile:
+        # Read the CSV file
+        reader = csv.DictReader(csvfile)
+
+        # Process each row
+        for row in reader:
+            # Check if the row matches the device name
+            if row['device'] == device_name:
+                # Check if the location ends with 'd'
+                if row['location'].endswith('d'):
+                    # Convert timestamp to datetime
+                    row_time = datetime.datetime.fromtimestamp(int(row['timestamp']) / 1000)
+
+                    # Check if the time difference is less than 3 minutes and the value is larger than -60
+                    if (current_time - row_time).total_seconds() <= 180 and int(row['value']) > -60:
+                        # This row meets all conditions
+                        print(row)
+
+
+# Test the function with a device name
+filter_data(device)

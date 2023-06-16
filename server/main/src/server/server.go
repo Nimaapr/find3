@@ -1485,7 +1485,7 @@ func sendOutData(p models.SensorData) (analysis models.LocationAnalysis, err err
 	//***************************************
 	// test python file just to print sensors
 	sensorsJSON, err := json.Marshal(p.Sensors)
-	cmd := exec.Command("python3", "/app/main/src/server/sendouttest.py", p.Family, string(sensorsJSON))
+	cmd := exec.Command("python3", "/app/main/src/server/sendouttest.py", p.Family, string(sensorsJSON), d.Device, d.Location)
 	err = cmd.Run()
 	if err != nil {
 		// fmt.Println(err)
