@@ -1491,6 +1491,7 @@ func sendOutData(p models.SensorData) (analysis models.LocationAnalysis, err err
 		// handle error
 	}
 	fmt.Println(string(output))
+	logger.Log.Debugf("[%s] requirement is met: ", output)
 	//***************************************
 	analysis, _ = api.AnalyzeSensorData(p)
 	if len(analysis.Guesses) == 0 {

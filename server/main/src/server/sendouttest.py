@@ -13,7 +13,7 @@ location = sys.argv[4]
 
 with open('/app/main/static/img2/sendouttest.txt', 'w') as f:
         f.write(family + "\n")
-        f.write(sensors + "\n")
+        f.write(sensors + "\n") 
         f.write(device + "\n")
         f.write(location + "\n")
 

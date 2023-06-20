@@ -5,14 +5,17 @@ from datetime import datetime, timedelta
 
 family = sys.argv[1]
 sensors = sys.argv[2]
-timestamp = sys.argv[3]
+# timestamp = sys.argv[3]
+# timestamp = datetime.datetime.fromtimestamp(int(timestamp) / 1000)
+# timestamp = datetime.fromtimestamp(int(sys.argv[3]))
+timestamp = int(sys.argv[3])
 device = sys.argv[4]
 location = sys.argv[5]
 
 with open('/app/main/static/img2/eq_process.txt', 'w') as f:
         f.write(family + "\n")
         f.write(sensors + "\n")
-        f.write(timestamp + "\n")
+        f.write(str(timestamp) + "\n")
         f.write(device + "\n")
         f.write(location + "\n")
 
@@ -26,7 +29,7 @@ try:
     with open(csv_filename_wrk, 'r') as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
-            workers_conditions[row['worker']] = row['condition'], datetime.strptime(row['timestamp'], '%Y-%m-%d %H:%M:%S')
+            workers_conditions[row['worker']] = row['condition'], int(row['timestamp'])
 except FileNotFoundError:
     pass
 
@@ -55,12 +58,17 @@ def process_data(data):
         if location.endswith("dd"):
             workers_conditions[device] = (False, timestamp)
         elif location.endswith("d"):
-            if key == 'Eq_PPE' and value < -60:
+            # with open('/app/main/static/img2/processed_data.txt', 'a') as f:
+            #     f.write("inside the location d condition" + "\n")
+            if key.startswith('Eq_PPE') and value > -65:
                 workers_conditions[device] = (True, timestamp)
+                # with open('/app/main/static/img2/processed_data.txt', 'a') as f:
+                #     f.write("inside the Eq_PPE condition " + str(workers_conditions)+device+ "\n")
             else:
-                last_condition, last_timestamp = workers_conditions.get(device, (False, datetime.min))
-                if last_condition and last_timestamp > datetime.now() - timedelta(minutes=1):
-                    workers_conditions[device] = (True, timestamp)
+                last_condition, last_timestamp = workers_conditions.get(device, (False, 0))
+                if last_condition and datetime.fromtimestamp(last_timestamp/1000.0)> datetime.now() - timedelta(minutes=1):
+                    # Use previous time until it is replaced with new beacon info
+                    workers_conditions[device] = (True, last_timestamp)
                 else:
                     workers_conditions[device] = (False, timestamp)
         elif location.endswith("s"):
@@ -72,17 +80,20 @@ def process_data(data):
 sensor_data = json.loads(sensors)
 processed_data = process_data(sensor_data)
 
+# with open('/app/main/static/img2/processed_data.txt', 'a') as f:
+#         f.write("after running the function "+str(workers_conditions) + "\n")
+
 # Save worker's conditions
 with open(csv_filename_wrk, 'w', newline='') as csvfile:
     fieldnames = ['worker', 'condition', 'timestamp']
     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
     writer.writeheader()
     for worker, (condition, timestamp) in workers_conditions.items():
-        writer.writerow({'worker': worker, 'condition': condition, 'timestamp': timestamp.strftime('%Y-%m-%d %H:%M:%S')})
+        writer.writerow({'worker': worker, 'condition': condition, 'timestamp': timestamp})
 
 # Convert the processed data back to a JSON string
 processed_json = json.dumps(processed_data)
 print(processed_json)
 
-with open('/app/main/static/img2/processed_data.txt', 'w') as f:
-        f.write(processed_json + "\n")
+# with open('/app/main/static/img2/processed_data.txt', 'w') as f:
+#         f.write(processed_json + "\n")
