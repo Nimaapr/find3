@@ -971,47 +971,6 @@ func handlerData(c *gin.Context) {
 			return
 		}
 
-		// call Python function for processing equipment
-		sensorsJSON, err := json.Marshal(d.Sensors)
-		timestampStr := strconv.FormatInt(d.Timestamp, 10)
-		cmd := exec.Command("python3", "/app/main/src/server/Eq_process.py", d.Family, string(sensorsJSON), timestampStr, d.Device, d.Location)
-
-		// Collect the output from the Python script
-		output, err := cmd.CombinedOutput()
-		if err != nil {
-			return
-		}
-
-		// Define a structure to hold the output
-		type Output struct {
-			Location string
-			Data     map[string]map[string]interface{}
-		}
-
-		// Unmarshal the JSON output into the structure
-		var result Output
-		err = json.Unmarshal(output, &result)
-		if err != nil {
-			return "", err
-		}
-
-		// Extract the modified sensors and location from the result
-		d.Sensors = result.Data
-		d.Location = result.Location
-
-		// output, err := cmd.CombinedOutput()
-		// if err != nil {
-		// 	return
-		// }
-
-		var modifiedSensors map[string]map[string]interface{}
-		// err = json.Unmarshal(output, &modifiedSensors)
-		// if err != nil {
-		// 	return "", err
-		// }
-
-		// d.Sensors = modifiedSensors
-
 		// call Python function for Kalman filter
 		sensorsJSON, err = json.Marshal(d.Sensors)
 		cmd = exec.Command("python3", "/app/main/src/server/Kalman_filter.py", d.Family, string(sensorsJSON))
@@ -1021,7 +980,7 @@ func handlerData(c *gin.Context) {
 			return
 		}
 
-		// var modifiedSensors map[string]map[string]interface{}
+		var modifiedSensors map[string]map[string]interface{}
 		err = json.Unmarshal(output, &modifiedSensors)
 		if err != nil {
 			return "", err
@@ -1048,6 +1007,7 @@ func handlerData(c *gin.Context) {
 		//***************************************
 		// test python file just to print sensors
 		sensorsJSON, err = json.Marshal(d.Sensors)
+		timestampStr := strconv.FormatInt(d.Timestamp, 10)
 		cmd = exec.Command("python3", "/app/main/src/server/pytest.py", d.Family, string(sensorsJSON), timestampStr, d.Device, d.Location)
 		err = cmd.Run()
 		if err != nil {
@@ -1510,6 +1470,49 @@ func sendOutData(p models.SensorData) (analysis models.LocationAnalysis, err err
 	}
 
 	p.Family = strings.TrimSpace(strings.ToLower(p.Family))
+
+	// *****************************************************
+	// call Python function for processing equipment
+	sensorsJSON, err = json.Marshal(p.Sensors)
+	timestampStr := strconv.FormatInt(p.Timestamp, 10)
+	cmd = exec.Command("python3", "/app/main/src/server/Eq_process.py", p.Family, string(sensorsJSON), timestampStr, p.Device, p.Location)
+
+	// Collect the output from the Python script
+	output, err = cmd.CombinedOutput()
+	if err != nil {
+		return
+	}
+
+	// Define a structure to hold the output
+	type Output struct {
+		Location string
+		Data     map[string]map[string]interface{}
+	}
+
+	// Unmarshal the JSON output into the structure
+	var result Output
+	err = json.Unmarshal(output, &result)
+	if err != nil {
+		return "", err
+	}
+
+	// Extract the modified sensors and location from the result
+	p.Sensors = result.Data
+	p.Location = result.Location
+
+	// output, err := cmd.CombinedOutput()
+	// if err != nil {
+	// 	return
+	// }
+
+	// var modifiedSensors map[string]map[string]interface{}
+	// err = json.Unmarshal(output, &modifiedSensors)
+	// if err != nil {
+	// 	return "", err
+	// }
+
+	// d.Sensors = modifiedSensors
+	// *****************************************************
 
 	// logger.Log.Debugf("sending data over websockets (%s/%s):%s", p.Family, p.Device, bTarget)
 	SendMessageOverWebsockets(p.Family, p.Device, bTarget)
