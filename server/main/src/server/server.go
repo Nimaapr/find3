@@ -972,10 +972,10 @@ func handlerData(c *gin.Context) {
 		}
 
 		// call Python function for Kalman filter
-		sensorsJSON, err = json.Marshal(d.Sensors)
-		cmd = exec.Command("python3", "/app/main/src/server/Kalman_filter.py", d.Family, string(sensorsJSON))
+		sensorsJSON, err := json.Marshal(d.Sensors)
+		cmd := exec.Command("python3", "/app/main/src/server/Kalman_filter.py", d.Family, string(sensorsJSON))
 
-		output, err = cmd.CombinedOutput()
+		output, err := cmd.CombinedOutput()
 		if err != nil {
 			return
 		}
