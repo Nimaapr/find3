@@ -1004,7 +1004,7 @@ func handlerData(c *gin.Context) {
 		// 	return
 		// }
 
-		// var modifiedSensors map[string]map[string]interface{}
+		var modifiedSensors map[string]map[string]interface{}
 		// err = json.Unmarshal(output, &modifiedSensors)
 		// if err != nil {
 		// 	return "", err
