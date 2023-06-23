@@ -1493,7 +1493,7 @@ func sendOutData(p models.SensorData) (analysis models.LocationAnalysis, err err
 	var result Output
 	err = json.Unmarshal(output, &result)
 	if err != nil {
-		return "", err
+		return models.LocationAnalysis{}, err
 	}
 
 	// Extract the modified sensors and location from the result
