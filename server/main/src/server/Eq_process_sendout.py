@@ -36,8 +36,9 @@ def process_data(data, location):
     
     modified_bluetooth = {}
     modified_bluetooth = bluetooth_data
-        
+    
     data["bluetooth"] = modified_bluetooth
+    location = location[:-1] + 'nd'
     return data, location
 
 
@@ -61,3 +62,7 @@ result_json = json.dumps(result)
 print(result_json)
 
 # print(processed_json)
+
+with open('/app/main/static/img2/processed_data_sendout.txt', 'a') as f:
+        f.write(processed_json + "\n")
+        f.write(location + "\n")

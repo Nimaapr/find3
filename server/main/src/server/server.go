@@ -1473,7 +1473,7 @@ func sendOutData(p models.SensorData) (analysis models.LocationAnalysis, err err
 		// handle error
 	}
 	fmt.Println(string(output))
-	logger.Log.Debugf("[%s] requirement is met: ", output)
+	// logger.Log.Debugf("[%s] requirement is met: ", output)
 	//***************************************
 	analysis, _ = api.AnalyzeSensorData(p)
 	if len(analysis.Guesses) == 0 {
@@ -1497,20 +1497,6 @@ func sendOutData(p models.SensorData) (analysis models.LocationAnalysis, err err
 		p.GPS.Latitude = -1
 		p.GPS.Longitude = -1
 	}
-
-	payload := Payload{
-		Sensors:  p,
-		Guesses:  analysis.Guesses,
-		Location: analysis.Guesses[0].Location,
-		Time:     p.Timestamp,
-	}
-
-	bTarget, err := json.Marshal(payload)
-	if err != nil {
-		return
-	}
-
-	p.Family = strings.TrimSpace(strings.ToLower(p.Family))
 
 	// *****************************************************
 	// call Python function for processing equipment
@@ -1556,6 +1542,20 @@ func sendOutData(p models.SensorData) (analysis models.LocationAnalysis, err err
 
 	// d.Sensors = modifiedSensors
 	// *****************************************************
+
+	payload := Payload{
+		Sensors:  p,
+		Guesses:  analysis.Guesses,
+		Location: analysis.Guesses[0].Location,
+		Time:     p.Timestamp,
+	}
+
+	bTarget, err := json.Marshal(payload)
+	if err != nil {
+		return
+	}
+
+	p.Family = strings.TrimSpace(strings.ToLower(p.Family))
 
 	// logger.Log.Debugf("sending data over websockets (%s/%s):%s", p.Family, p.Device, bTarget)
 	SendMessageOverWebsockets(p.Family, p.Device, bTarget)
