@@ -1048,7 +1048,7 @@ func handlerData(c *gin.Context) {
 		//***************************************
 		// test python file just to print sensors
 		sensorsJSON, err = json.Marshal(d.Sensors)
-		timestampStr := strconv.FormatInt(d.Timestamp, 10)
+		// timestampStr := strconv.FormatInt(d.Timestamp, 10)
 		cmd = exec.Command("python3", "/app/main/src/server/pytest.py", d.Family, string(sensorsJSON), timestampStr, d.Device, d.Location)
 		err = cmd.Run()
 		if err != nil {
