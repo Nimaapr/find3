@@ -487,13 +487,16 @@
         if (lastLocation == data.guesses[0].location) {
             entered = " still at "
         }
-        // Check the last character of the location
+        // Check the last character and last two characters of the location
         var lastChar = data.guesses[0].location.slice(-1);
+        var lastTwoChars = data.guesses[0].location.slice(-2);
         var notificationType = "info"; // Default toastr type
 
         if (lastChar === "s") {
             notificationType = "success"; // Green notification
-        } else if (lastChar === "d") {
+        } else if (lastTwoChars === "yd") {
+            notificationType = "success"; // Green notification
+        } else if (lastTwoChars === "nd") {
             notificationType = "error"; // Red notification
         }
 
