@@ -99,21 +99,20 @@ with open(csv_filename_wrk, 'w', newline='') as csvfile:
 
 # Convert the processed data back to a JSON string
 processed_json = json.dumps(processed_data)
+print(processed_json)
 
-# Combine processed_data and location into a single dictionary
-result = {
-    'location': location,
-    'data': processed_data
-}
+# # uncomment if you want to return location and sensor data
+# # Combine processed_data and location into a single dictionary
+# result = {
+#     'location': location,
+#     'data': processed_data
+# }
+# # Convert the result back to a JSON string
+# result_json = json.dumps(result)
 
-# Convert the result back to a JSON string
-result_json = json.dumps(result)
+# # Print the JSON string
+# print(result_json)
 
-# Print the JSON string
-print(result_json)
-
-# print(processed_json)
-
-# with open('/app/main/static/img2/processed_data.txt', 'w') as f:
-#         f.write(processed_json + "\n")
-#         f.write(location + "\n")
+with open('/app/main/static/img2/processed_data.txt', 'a') as f:
+        f.write(processed_json + "\n")
+        f.write(location + "\n")
