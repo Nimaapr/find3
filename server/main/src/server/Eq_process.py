@@ -5,7 +5,6 @@ from datetime import datetime, timedelta
 
 family = sys.argv[1]
 sensors = sys.argv[2]
-# timestamp = sys.argv[3]
 # timestamp = datetime.datetime.fromtimestamp(int(timestamp) / 1000)
 # timestamp = datetime.fromtimestamp(int(sys.argv[3]))
 timestamp = int(sys.argv[3])
@@ -33,7 +32,7 @@ try:
 except FileNotFoundError:
     pass
 
-def process_data(data, location):
+def process_data(data):
     # Extract the bluetooth data
     bluetooth_data = data["bluetooth"]
     
@@ -59,35 +58,25 @@ def process_data(data, location):
         if location.endswith("dd"):
             workers_conditions[device] = (False, timestamp)
         elif location.endswith("d"):
-            # with open('/app/main/static/img2/processed_data.txt', 'a') as f:
-            #     f.write("inside the location d condition" + "\n")
             if key.startswith('Eq_PPE') and value > -65:
                 workers_conditions[device] = (True, timestamp)
-                location = location[:-1] + 'yd'
-                # with open('/app/main/static/img2/processed_data.txt', 'a') as f:
-                #     f.write("inside the Eq_PPE condition " + str(workers_conditions)+device+ "\n")
             else:
                 last_condition, last_timestamp = workers_conditions.get(device, (False, 0))
                 if last_condition and datetime.fromtimestamp(last_timestamp/1000.0)> datetime.now() - timedelta(minutes=1):
                     # Use previous time until it is replaced with new beacon info
                     workers_conditions[device] = (True, last_timestamp)
-                    location = location[:-1] + 'yd'
                 else:
                     workers_conditions[device] = (False, timestamp)
-                    location = location[:-1] + 'nd'
         elif location.endswith("s"):
             workers_conditions[device] = (True, timestamp)
         
     data["bluetooth"] = modified_bluetooth
-    return data, location
+    return data
 
 
 
 sensor_data = json.loads(sensors)
-processed_data, location = process_data(sensor_data, location)
-
-# with open('/app/main/static/img2/processed_data.txt', 'a') as f:
-#         f.write("after running the function "+str(workers_conditions) + "\n")
+processed_data = process_data(sensor_data)
 
 # Save worker's conditions
 with open(csv_filename_wrk, 'w', newline='') as csvfile:
@@ -113,6 +102,6 @@ print(processed_json)
 # # Print the JSON string
 # print(result_json)
 
-with open('/app/main/static/img2/processed_data.txt', 'a') as f:
+with open('/app/main/static/img2/processed_data.txt', 'w') as f:
         f.write(processed_json + "\n")
         f.write(location + "\n")
