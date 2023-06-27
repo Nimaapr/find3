@@ -9,7 +9,7 @@ timestamp = int(sys.argv[3])
 device = sys.argv[4]
 location = sys.argv[5]
 
-with open('/app/main/static/img2/eq_process_sendout.txt', 'a') as f:
+with open('/app/main/static/img2/eq_process_sendout.txt', 'w') as f:
         f.write(family + "\n")
         f.write(sensors + "\n")
         f.write(str(timestamp) + "\n")
@@ -30,29 +30,19 @@ try:
 except FileNotFoundError:
     pass
 
-def process_data(data, location):
+def process_data(location):
     # Extract the bluetooth data
-    bluetooth_data = data["bluetooth"]
     
-    modified_bluetooth = {}
-    modified_bluetooth = bluetooth_data
     
-    data["bluetooth"] = modified_bluetooth
-    location = location[:-1] + 'nd'
-    return data, location
+    return location
 
 
 
-sensor_data = json.loads(sensors)
-processed_data, location = process_data(sensor_data, location)
+location = process_data(location)
 
-# Convert the processed data back to a JSON string
-processed_json = json.dumps(processed_data)
-
-# Combine processed_data and location into a single dictionary
+# create a dictionary with the location
 result = {
-    'location': location,
-    'data': processed_data
+    'location': location
 }
 
 # Convert the result back to a JSON string
@@ -61,8 +51,6 @@ result_json = json.dumps(result)
 # Print the JSON string
 print(result_json)
 
-# print(processed_json)
 
 with open('/app/main/static/img2/processed_data_sendout.txt', 'a') as f:
-        f.write(processed_json + "\n")
         f.write(location + "\n")

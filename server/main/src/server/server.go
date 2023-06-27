@@ -1514,7 +1514,6 @@ func sendOutData(p models.SensorData) (analysis models.LocationAnalysis, err err
 	// Define a structure to hold the output
 	type Output struct {
 		Location string
-		Data     map[string]map[string]interface{}
 	}
 
 	// Unmarshal the JSON output into the structure
@@ -1524,23 +1523,8 @@ func sendOutData(p models.SensorData) (analysis models.LocationAnalysis, err err
 		return
 	}
 
-	// Extract the modified sensors and location from the result
-	p.Sensors = result.Data
 	// Update analysis.Guesses[0].Location with the modified location
 	analysis.Guesses[0].Location = result.Location
-
-	// output, err := cmd.CombinedOutput()
-	// if err != nil {
-	// 	return
-	// }
-
-	// var modifiedSensors map[string]map[string]interface{}
-	// err = json.Unmarshal(output, &modifiedSensors)
-	// if err != nil {
-	// 	return "", err
-	// }
-
-	// d.Sensors = modifiedSensors
 	// *****************************************************
 
 	payload := Payload{
