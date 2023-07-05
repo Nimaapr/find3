@@ -498,6 +498,8 @@
             notificationType = "success"; // Green notification
         } else if (lastTwoChars === "nd") {
             notificationType = "error"; // Red notification
+        } else if (lastTwoChars === "dd") {
+            notificationType = "error"; // Red notification
         }
 
         toastr[notificationType](data.sensors.d + entered + data.guesses[0].location + " (" + Math.round(100 * data.guesses[0].probability) +

@@ -70,13 +70,16 @@ def process_data(data, location):
         elif location.endswith("d"):
             if key.startswith('Eq_PPE') and value > -65:
                 workers_conditions[device] = (True, timestamp)
+                location = location[:-1] + 'yd'
             else:
                 last_condition, last_timestamp = workers_conditions.get(device, (False, 0))
-                if last_condition and datetime.fromtimestamp(last_timestamp/1000.0)> datetime.now() - timedelta(minutes=1):
+                if last_condition and datetime.fromtimestamp(last_timestamp/1000.0)> datetime.now() - timedelta(minutes=2):
                     # Use previous time until it is replaced with new beacon info
                     workers_conditions[device] = (True, last_timestamp)
+                    location = location[:-1] + 'yd'
                 else:
                     workers_conditions[device] = (False, timestamp)
+                    location = location[:-1] + 'nd'
         elif location.endswith("s"):
             workers_conditions[device] = (True, timestamp)
         elif location=='':
