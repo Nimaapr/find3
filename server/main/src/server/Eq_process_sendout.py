@@ -8,6 +8,7 @@ sensors = sys.argv[2]
 timestamp = int(sys.argv[3])
 device = sys.argv[4]
 location = sys.argv[5]
+location_org = sys.argv[6]
 
 with open('/app/main/static/img2/eq_process_sendout.txt', 'w') as f:
         f.write(family + "\n")
@@ -46,6 +47,8 @@ with open(csv_filename_eq, 'w', newline='') as csvfile:
     for row in csv_data:
         writer.writerow(row)
 
+
+# ********************************************************************
 # Load worker's last known conditions
 workers_conditions = {}
 try:
@@ -56,15 +59,49 @@ try:
 except FileNotFoundError:
     pass
 
-def process_data(location):
+def process_data(data, location):
     # Extract the bluetooth data
+    bluetooth_data = data["bluetooth"]
+
+    for key, value in bluetooth_data.items():
+        # Check worker's conditions
+        if location.endswith("dd"):
+            workers_conditions[device] = (False, timestamp)
+        elif location.endswith("d"):
+            if key.startswith('Eq_PPE') and value > -65:
+                workers_conditions[device] = (True, timestamp)
+            else:
+                last_condition, last_timestamp = workers_conditions.get(device, (False, 0))
+                if last_condition and datetime.fromtimestamp(last_timestamp/1000.0)> datetime.now() - timedelta(minutes=1):
+                    # Use previous time until it is replaced with new beacon info
+                    workers_conditions[device] = (True, last_timestamp)
+                else:
+                    workers_conditions[device] = (False, timestamp)
+        elif location.endswith("s"):
+            workers_conditions[device] = (True, timestamp)
+        elif location=='':
+            workers_conditions[device] = (False, timestamp)
     
-    location = location[:-1] + 'yd'
+    # location = location[:-1] + 'yd'
     return location
 
 
+sensor_data = json.loads(sensors)
+if location_org=='':
+    location_process= location
+else:
+    location_process=location_org
 
-location = process_data(location)
+location = process_data(sensor_data, location_process)
+
+# Save worker's conditions
+with open(csv_filename_wrk, 'w', newline='') as csvfile:
+    fieldnames = ['worker', 'condition', 'timestamp']
+    writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+    writer.writeheader()
+    for worker, (condition, timestamp) in workers_conditions.items():
+        writer.writerow({'worker': worker, 'condition': condition, 'timestamp': timestamp})
+
 
 # create a dictionary with the location
 result = {

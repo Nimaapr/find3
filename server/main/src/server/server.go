@@ -1503,7 +1503,7 @@ func sendOutData(p models.SensorData) (analysis models.LocationAnalysis, err err
 	sensorsJSON, err = json.Marshal(p.Sensors)
 	timestampStr := strconv.FormatInt(p.Timestamp, 10)
 	// Note: Here I'm sending analysis.Guesses[0].Location instead of p.Location
-	cmd = exec.Command("python3", "/app/main/src/server/Eq_process_sendout.py", p.Family, string(sensorsJSON), timestampStr, p.Device, analysis.Guesses[0].Location)
+	cmd = exec.Command("python3", "/app/main/src/server/Eq_process_sendout.py", p.Family, string(sensorsJSON), timestampStr, p.Device, analysis.Guesses[0].Location, p.Location)
 
 	// Collect the output from the Python script
 	output, err = cmd.CombinedOutput()
