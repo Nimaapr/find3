@@ -11,7 +11,7 @@ timestamp = int(sys.argv[3])
 device = sys.argv[4]
 location = sys.argv[5]
 
-with open('/app/main/static/img2/eq_process.txt', 'w') as f:
+with open('/app/main/static/img2/eq_process.txt', 'a') as f:
         f.write(family + "\n")
         f.write(sensors + "\n")
         f.write(str(timestamp) + "\n")
@@ -29,7 +29,7 @@ def process_data(data):
     for key, value in bluetooth_data.items():
         if key.startswith("St"):
             modified_bluetooth[key] = value
-        elif key.startswith("Equ"):
+        elif key.startswith("Eq"):
             # convert the elif from "Equ" to "Eq" to save all the equipment
             # Open CSV file and append data
             with open(csv_filename_eq, 'a', newline='') as csvfile:

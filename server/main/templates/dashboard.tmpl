@@ -467,6 +467,8 @@
     });
     var socket;
 
+    let lastYdTimestamps = {}; // Stores the last 'yd' timestamp for each idName
+
     const socketMessageListener = (event) => {
         console.log(event);
         data = JSON.parse(event.data);
@@ -477,7 +479,6 @@
         $("#location-" + idName).text(data.guesses[0].location);
         $("#probability-" + idName).text(Math.round(100 * data.guesses[0].probability) +
             "%");
-
 
         var date = new Date(0);
         date.setUTCMilliseconds(data.sensors.t);
@@ -492,12 +493,17 @@
         var lastTwoChars = data.guesses[0].location.slice(-2);
         var notificationType = "info"; // Default toastr type
 
-        if (lastChar === "s") {
+        // If location is 'nd', check if last 'yd' location was within the past two minutes
+        if (lastTwoChars === "nd") {
+            notificationType = "error"; // Red notification by default
+            if (lastYdTimestamps[idName] && (date - lastYdTimestamps[idName] <= 120000)) {
+                notificationType = "success"; // Green notification
+            }
+        } else if (lastChar === "s") {
             notificationType = "success"; // Green notification
         } else if (lastTwoChars === "yd") {
+            lastYdTimestamps[idName] = date; // Save the timestamp of this 'yd' location
             notificationType = "success"; // Green notification
-        } else if (lastTwoChars === "nd") {
-            notificationType = "error"; // Red notification
         } else if (lastTwoChars === "dd") {
             notificationType = "error"; // Red notification
         }
@@ -505,6 +511,7 @@
         toastr[notificationType](data.sensors.d + entered + data.guesses[0].location + " (" + Math.round(100 * data.guesses[0].probability) +
             "%)");
     };
+
 
     const socketOpenListener = (event) => {
         console.log('Connected');
