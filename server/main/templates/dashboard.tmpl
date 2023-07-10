@@ -496,7 +496,7 @@
         // If location is 'nd', check if last 'yd' location was within the past two minutes
         if (lastTwoChars === "nd") {
             notificationType = "error"; // Red notification by default
-            if (lastYdTimestamps[idName] && (date - lastYdTimestamps[idName] <= 120000)) {
+            if (lastYdTimestamps[idName] && (date - lastYdTimestamps[idName] <= 450000)) {
                 notificationType = "success"; // Green notification
             }
         } else if (lastChar === "s") {
