@@ -1481,10 +1481,11 @@ func sendOutData(p models.SensorData) (analysis models.LocationAnalysis, err err
 		return
 	}
 	type Payload struct {
-		Sensors  models.SensorData           `json:"sensors"`
-		Guesses  []models.LocationPrediction `json:"guesses"`
-		Location string                      `json:"location"` // FIND backwards-compatability
-		Time     int64                       `json:"time"`     // FIND backwards-compatability
+		Sensors           models.SensorData           `json:"sensors"`
+		Guesses           []models.LocationPrediction `json:"guesses"`
+		Location          string                      `json:"location"`           // FIND backwards-compatability
+		Time              int64                       `json:"time"`               // FIND backwards-compatability
+		EquipmentLocation string                      `json:"equipment_location"` // New field
 	}
 
 	// determine GPS coordinates
@@ -1525,13 +1526,28 @@ func sendOutData(p models.SensorData) (analysis models.LocationAnalysis, err err
 
 	// Update analysis.Guesses[0].Location with the modified location
 	analysis.Guesses[0].Location = result.Location
+
+	// call Python function for tracking equipment
+	cmd = exec.Command("python3", "/app/main/src/server/Eq_track.py", p.Family, p.Device)
+	// Collect the output from the Python script
+	output, err = cmd.CombinedOutput()
+	if err != nil {
+		return
+	}
+
+	// Unmarshal the JSON output into the structure
+	err = json.Unmarshal(output, &result)
+	if err != nil {
+		return
+	}
 	// *****************************************************
 
 	payload := Payload{
-		Sensors:  p,
-		Guesses:  analysis.Guesses,
-		Location: analysis.Guesses[0].Location,
-		Time:     p.Timestamp,
+		Sensors:           p,
+		Guesses:           analysis.Guesses,
+		Location:          analysis.Guesses[0].Location,
+		Time:              p.Timestamp,
+		EquipmentLocation: result.Location, // New field
 	}
 
 	bTarget, err := json.Marshal(payload)

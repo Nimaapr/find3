@@ -507,6 +507,10 @@
         } else if (lastTwoChars === "dd") {
             notificationType = "error"; // Red notification
         }
+        if (data.equipment_location !== "") {
+            toastr["info"]("Equipment location is: " + data.equipment_location);
+        }
+
 
         toastr[notificationType](data.sensors.d + entered + data.guesses[0].location + " (" + Math.round(100 * data.guesses[0].probability) +
             "%)");
