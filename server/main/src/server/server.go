@@ -1481,11 +1481,11 @@ func sendOutData(p models.SensorData) (analysis models.LocationAnalysis, err err
 		return
 	}
 	type Payload struct {
-		Sensors           models.SensorData           `json:"sensors"`
-		Guesses           []models.LocationPrediction `json:"guesses"`
-		Location          string                      `json:"location"`           // FIND backwards-compatability
-		Time              int64                       `json:"time"`               // FIND backwards-compatability
-		EquipmentLocation string                      `json:"equipment_location"` // New field
+		Sensors  models.SensorData           `json:"sensors"`
+		Guesses  []models.LocationPrediction `json:"guesses"`
+		Location string                      `json:"location"` // FIND backwards-compatability
+		Time     int64                       `json:"time"`     // FIND backwards-compatability
+		// EquipmentLocation string                      `json:"equipment_location"` // New field
 	}
 
 	// determine GPS coordinates
@@ -1543,11 +1543,11 @@ func sendOutData(p models.SensorData) (analysis models.LocationAnalysis, err err
 	// *****************************************************
 
 	payload := Payload{
-		Sensors:           p,
-		Guesses:           analysis.Guesses,
-		Location:          analysis.Guesses[0].Location,
-		Time:              p.Timestamp,
-		EquipmentLocation: result.Location, // New field
+		Sensors:  p,
+		Guesses:  analysis.Guesses,
+		Location: analysis.Guesses[0].Location,
+		Time:     p.Timestamp,
+		// EquipmentLocation: result.Location, // New field
 	}
 
 	bTarget, err := json.Marshal(payload)

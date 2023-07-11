@@ -6,9 +6,11 @@ from scipy.optimize import least_squares
 
 
 family = sys.argv[1]
-device = sys.argv[4]
-location = sys.argv[5]
+device = sys.argv[2]
 
+with open('/app/main/static/img2/track_data.txt', 'a') as f:
+        f.write(device + "\n")
+        f.write(family + "\n")
 
 def calculate_distance(rssi, tx_power):
     # tx_power is the RSSI value at 1 meter distance
@@ -118,11 +120,18 @@ def main():
     # print(f'Combined Position: {avg_position}')
     print(avg_position)
 
-if __name__ == '__main__':
-    # main()
-    print (str((np.ndarray([1,2]))))
 
+# main()
+result = {
+'location': str((np.ndarray([1,2])))
+}
+result_json = json.dumps(result)
+print (result_json)
 
+with open('/app/main/static/img2/Eq_track.txt', 'a') as f:
+        f.write(device + "\n")
+        f.write(family + "\n")
+        f.write(str(result) + "\n")
 
 
 
