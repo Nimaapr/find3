@@ -508,10 +508,10 @@
             notificationType = "error"; // Red notification
         }
 
-        if (data.equipmentlocation !== "") {
-            toastr["info"]("Equipment location is: " + data.equipmentlocation);
-        } else if (data.equipmentlocation === "") {
-            toastr["info"]("Equipment location is empty");
+        if (data.equipment_location !== "") {
+            toastr["success"]("Equipment location is: " + data.equipmentlocation);
+        } else if (data.equipment_location === "") {
+            toastr["success"]("Equipment location is empty");
         }
 
 
