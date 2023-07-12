@@ -3,7 +3,7 @@ import json
 import numpy as np
 from datetime import datetime, timedelta
 from scipy.optimize import least_squares
-
+import sys
 
 family = sys.argv[1]
 device = sys.argv[2]

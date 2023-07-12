@@ -1547,7 +1547,7 @@ func sendOutData(p models.SensorData) (analysis models.LocationAnalysis, err err
 		Guesses:           analysis.Guesses,
 		Location:          analysis.Guesses[0].Location,
 		Time:              p.Timestamp,
-		EquipmentLocation: "result.Location", // New field
+		EquipmentLocation: result.Location, // New field
 	}
 
 	bTarget, err := json.Marshal(payload)
