@@ -88,45 +88,62 @@ def perform_trilateration(filtered_data, tx_power):
 
 
 # Main function implementing the three approaches
-def main():
-    csv_filename = '/app/main/static/img2/Eq_beacons.csv'
-#     csv_filename = './random_data.csv'
-    tx_power = -59  # This should be calibrated for your beacons
+# def main():
+#     csv_filename = '/app/main/static/img2/Eq_beacons.csv'
+# #     csv_filename = './random_data.csv'
+#     tx_power = -59  # This should be calibrated for your beacons
     
-    equipment = 'Equ'  # Equipment to track
-    worker = 'worker1'  # Worker to filter by for approach 1
+#     equipment = 'Equ'  # Equipment to track
+#     worker = 'worker1'  # Worker to filter by for approach 1
     
-    # Step 1: Read data from CSV
-    data = read_data_from_csv(csv_filename)
+#     # Step 1: Read data from CSV
+#     data = read_data_from_csv(csv_filename)
     
-    # Step 2: Filter data
-    data_by_worker = filter_data(data, equipment, worker)
-    data_any_worker = filter_data(data, equipment)
+#     # Step 2: Filter data
+#     data_by_worker = filter_data(data, equipment, worker)
+#     data_any_worker = filter_data(data, equipment)
     
-    # Step 3: Perform Trilateration
-    position_by_worker = perform_trilateration(data_by_worker, tx_power)
-    position_any_worker = perform_trilateration(data_any_worker, tx_power)
+#     # Step 3: Perform Trilateration
+#     position_by_worker = perform_trilateration(data_by_worker, tx_power)
+#     position_any_worker = perform_trilateration(data_any_worker, tx_power)
     
-    # Step 4: Combine approach 1 and 2
-    if position_by_worker is not None and position_any_worker is not None:
-        avg_position = np.mean([position_by_worker, position_any_worker], axis=0)
-    else:
-        avg_position = position_by_worker if position_by_worker is not None else position_any_worker
+#     # Step 4: Combine approach 1 and 2
+#     if position_by_worker is not None and position_any_worker is not None:
+#         avg_position = np.mean([position_by_worker, position_any_worker], axis=0)
+#     else:
+#         avg_position = position_by_worker if position_by_worker is not None else position_any_worker
 
     
-    # Output results
-    # print(f'Position using data from specific worker: {position_by_worker}')
-    # print(f'Position using data from any worker: {position_any_worker}')
-    # print(f'Combined Position: {avg_position}')
-    print(avg_position)
+#     # Output results
+#     # print(f'Position using data from specific worker: {position_by_worker}')
+#     # print(f'Position using data from any worker: {position_any_worker}')
+#     # print(f'Combined Position: {avg_position}')
+#     print(avg_position)
 
 
 # main()
+# result = {
+# 'location': str((np.ndarray([1,2])))
+# }
+# result_json = json.dumps(result)
+# print (result_json)
+
+
+
+
+# ********************************************* test
+# create a dictionary with the location
 result = {
-'location': str((np.ndarray([1,2])))
+    'location': location
 }
+
+# Convert the result back to a JSON string
 result_json = json.dumps(result)
-print (result_json)
+
+# Print the JSON string
+print(result_json)
+
+
 
 with open('/app/main/static/img2/Eq_track.txt', 'a') as f:
         f.write(device + "\n")
