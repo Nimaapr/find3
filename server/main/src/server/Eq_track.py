@@ -4,6 +4,7 @@ import numpy as np
 from datetime import datetime, timedelta
 from scipy.optimize import least_squares
 import sys
+from collections import defaultdict
 
 family = sys.argv[1]
 device = sys.argv[2]
@@ -69,16 +70,27 @@ def filter_data(data, equipment, worker=None):
 
 # Perform Trilateration on filtered data
 def perform_trilateration(filtered_data, tx_power):
-    if len(filtered_data) < 3:
+    # Group the signals by location
+    signals_by_location = defaultdict(list)
+    for row in filtered_data:
+        location = row['location']
+        rssi = float(row['value'])
+        signals_by_location[location].append(rssi)
+    
+    # Average the RSSI values for each location
+    avg_rssi_by_location = {loc: sum(rssis) / len(rssis) for loc, rssis in signals_by_location.items()}
+    # Select the three locations with the most data
+    selected_locations = sorted(avg_rssi_by_location.items(), key=lambda x: len(signals_by_location[x[0]]), reverse=True)[:3]
+    if len(selected_locations) < 3:
         return None
 
-    position1 = (float(filtered_data[0]['location'].split(",")[0]), float(filtered_data[0]['location'].split(",")[1]))
-    position2 = (float(filtered_data[1]['location'].split(",")[0]), float(filtered_data[1]['location'].split(",")[1]))
-    position3 = (float(filtered_data[2]['location'].split(",")[0]), float(filtered_data[2]['location'].split(",")[1]))
+    position1 = tuple(map(float, selected_locations[0][0].split(',')))
+    position2 = tuple(map(float, selected_locations[1][0].split(',')))
+    position3 = tuple(map(float, selected_locations[2][0].split(',')))
 
-    rssi1 = float(filtered_data[0]['value'])
-    rssi2 = float(filtered_data[1]['value'])
-    rssi3 = float(filtered_data[2]['value'])
+    rssi1 = selected_locations[0][1]
+    rssi2 = selected_locations[1][1]
+    rssi3 = selected_locations[2][1]
 
     distance1 = calculate_distance(rssi1, tx_power)
     distance2 = calculate_distance(rssi2, tx_power)
@@ -88,60 +100,59 @@ def perform_trilateration(filtered_data, tx_power):
 
 
 # Main function implementing the three approaches
-# def main():
-#     csv_filename = '/app/main/static/img2/Eq_beacons.csv'
-# #     csv_filename = './random_data.csv'
-#     tx_power = -59  # This should be calibrated for your beacons
+def main():
+    csv_filename = '/app/main/static/img2/Eq_beacons.csv'
+    tx_power = -59  # This should be calibrated for your beacons
     
-#     equipment = 'Equ'  # Equipment to track
-#     worker = 'worker1'  # Worker to filter by for approach 1
+    equipment = 'Equ'  # Equipment to track
+    worker = 'worker1'  # Worker to filter by for approach 1
     
-#     # Step 1: Read data from CSV
-#     data = read_data_from_csv(csv_filename)
+    # Step 1: Read data from CSV
+    data = read_data_from_csv(csv_filename)
     
-#     # Step 2: Filter data
-#     data_by_worker = filter_data(data, equipment, worker)
-#     data_any_worker = filter_data(data, equipment)
+    # Step 2: Filter data
+    data_by_worker = filter_data(data, equipment, worker)
+    data_any_worker = filter_data(data, equipment)
     
-#     # Step 3: Perform Trilateration
-#     position_by_worker = perform_trilateration(data_by_worker, tx_power)
-#     position_any_worker = perform_trilateration(data_any_worker, tx_power)
+    # Step 3: Perform Trilateration
+    position_by_worker = perform_trilateration(data_by_worker, tx_power)
+    position_any_worker = perform_trilateration(data_any_worker, tx_power)
     
-#     # Step 4: Combine approach 1 and 2
-#     if position_by_worker is not None and position_any_worker is not None:
-#         avg_position = np.mean([position_by_worker, position_any_worker], axis=0)
-#     else:
-#         avg_position = position_by_worker if position_by_worker is not None else position_any_worker
+    # Step 4: Combine approach 1 and 2
+    if position_by_worker is not None and position_any_worker is not None:
+        avg_position = np.mean([position_by_worker, position_any_worker], axis=0)
+    else:
+        avg_position = position_by_worker if position_by_worker is not None else position_any_worker
 
     
-#     # Output results
-#     # print(f'Position using data from specific worker: {position_by_worker}')
-#     # print(f'Position using data from any worker: {position_any_worker}')
-#     # print(f'Combined Position: {avg_position}')
-#     print(avg_position)
+    # Output results
+    # print(f'Position using data from specific worker: {position_by_worker}')
+    # print(f'Position using data from any worker: {position_any_worker}')
+    # print(f'Combined Position: {avg_position}')
+    print(avg_position)
 
 
 # main()
-# result = {
-# 'location': str((np.ndarray([1,2])))
-# }
-# result_json = json.dumps(result)
-# print (result_json)
+result = {
+'location': str((np.ndarray([1,2])))
+}
+result_json = json.dumps(result)
+print (result_json)
 
 
 
 
 # ********************************************* test
 # create a dictionary with the location
-result = {
-    'location': "location"
-}
+# result = {
+#     'location': "location"
+# }
 
-# Convert the result back to a JSON string
-result_json = json.dumps(result)
+# # Convert the result back to a JSON string
+# result_json = json.dumps(result)
 
-# Print the JSON string
-print(result_json)
+# # Print the JSON string
+# print(result_json)
 
 
 
