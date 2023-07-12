@@ -134,7 +134,7 @@ def perform_trilateration(filtered_data, tx_power):
 # ********************************************* test
 # create a dictionary with the location
 result = {
-    'location': location
+    'location': "location"
 }
 
 # Convert the result back to a JSON string
