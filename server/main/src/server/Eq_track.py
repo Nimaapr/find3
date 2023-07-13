@@ -102,7 +102,7 @@ def perform_trilateration(filtered_data, tx_power):
 # Main function implementing the three approaches
 def main():
     csv_filename = '/app/main/static/img2/Eq_beacons.csv'
-    tx_power = -59  # This should be calibrated for your beacons
+    tx_power = -62  # This should be calibrated for your beacons
     
     equipment = 'Equ'  # Equipment to track
     worker = 'worker1'  # Worker to filter by for approach 1
@@ -129,12 +129,13 @@ def main():
     # print(f'Position using data from specific worker: {position_by_worker}')
     # print(f'Position using data from any worker: {position_any_worker}')
     # print(f'Combined Position: {avg_position}')
-    print(avg_position)
+    # print(avg_position)
+    return avg_position
 
 
-# main()
+location= main()
 result = {
-'location': str((np.ndarray([1,2])))
+'location': location
 }
 result_json = json.dumps(result)
 print (result_json)
