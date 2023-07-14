@@ -31,7 +31,6 @@ from threading import Thread
 import functools
 import multiprocessing
 
-# create logger with 'spam_application'
 logger = logging.getLogger('learn')
 logger.setLevel(logging.DEBUG)
 fh = logging.FileHandler('learn.log')
@@ -161,38 +160,6 @@ class AI(object):
         if badValue:
             return
 
-        # try:
-        #     t2 = time.time()
-        #     name = "Extended Naive Bayes"
-        #     clf = ExtendedNaiveBayes(self.family,path_to_data=self.path_to_data)
-        #     predictions = clf.predict_proba(header,csv_data)
-        #     predict_payload = {'name': name,'locations': [], 'probabilities': []}
-        #     for tup in predictions:
-        #         predict_payload['locations'].append(str(self.naming['from'][tup[0]]))
-        #         predict_payload['probabilities'].append(round(tup[1],2))
-        #     payload['predictions'].append(predict_payload)
-        #     self.logger.debug("{} {:d} ms".format(name,int(1000 * (t2 - time.time()))))
-        # except Exception as e:
-        #     self.logger.error(str(e))
-
-        # try:
-        #     t2 = time.time()
-        #     name = "Extended Naive Bayes2"
-        #     clf = ExtendedNaiveBayes2(self.family, path_to_data=self.path_to_data)
-        #     predictions = clf.predict_proba(header, csv_data)
-        #     predict_payload = {'name': name, 'locations': [], 'probabilities': []}
-        #     for tup in predictions:
-        #         predict_payload['locations'].append(
-        #             str(self.naming['from'][tup[0]]))
-        #         predict_payload['probabilities'].append(round(tup[1], 2))
-        #     payload['predictions'].append(predict_payload)
-        #     self.logger.debug("{} {:d} ms".format(
-        #         name, int(1000 * (t2 - time.time()))))
-        # except Exception as e:
-        #     self.logger.error(str(e))
-
-        # self.logger.debug("{} {:d} ms".format(
-        #     name, int(1000 * (t - time.time()))))
         self.results[index] = predict_payload
 
     @timeout(10)
@@ -279,25 +246,6 @@ class AI(object):
             except Exception as e:
                 self.logger.error("{} {}".format(name, str(e)))
 
-        # t2 = time.time()
-        # name = "Extended Naive Bayes"
-        # clf = ExtendedNaiveBayes(self.family, path_to_data=self.path_to_data)
-        # try:
-        #     clf.fit(fname)
-        #     self.logger.debug("learned {}, {:d} ms".format(
-        #         name, int(1000 * (t2 - time.time()))))
-        # except Exception as e:
-        #     self.logger.error(str(e))
-
-        # t2 = time.time()
-        # name = "Extended Naive Bayes2"
-        # clf = ExtendedNaiveBayes2(self.family, path_to_data=self.path_to_data)
-        # try:
-        #     clf.fit(fname)
-        #     self.logger.debug("learned {}, {:d} ms".format(
-        #         name, int(1000 * (t2 - time.time()))))
-        # except Exception as e:
-        #     self.logger.error(str(e))
         self.logger.debug("{:d} ms".format(int(1000 * (t - time.time()))))
 
     def save(self, save_file):
@@ -405,11 +353,3 @@ def do():
                 print(
                     k, g, len(set(known_groups[k]).intersection(guessed_groups[g])))
 
-
-# ai = AI()
-# ai.learn("../testing/testdb.csv")
-# ai.save("dGVzdGRi.find3.ai")
-# ai.load("dGVzdGRi.find3.ai")
-# a = json.load(open('../testing/testdb_single_rec.json'))
-# classified = ai.classify(a)
-# print(json.dumps(classified,indent=2))

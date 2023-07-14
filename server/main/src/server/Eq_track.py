@@ -38,7 +38,7 @@ def trilaterate(p1, p2, p3, r1, r2, r3):
 
 def read_data_from_csv(filename):
     data = []
-    ref_points = ['0,0', '7,1', '9,12', '450,450', '630, 450', '630, 360', '630, 270', '630, 180']
+    ref_points = ['0,0', '0,70', '55,190', '450,450', '630, 450', '630, 360', '630, 270', '630, 180']
 
     with open(filename, 'r') as csvfile:
         # Read the file to get the number of lines
@@ -56,7 +56,7 @@ def read_data_from_csv(filename):
             row['location'] = ref_points[int(location) - 1]
             
             last_timestamp = float(row['timestamp'])
-            if datetime.fromtimestamp(last_timestamp / 1000.0) < datetime.now() - timedelta(minutes=20):
+            if datetime.fromtimestamp(last_timestamp / 1000.0) < datetime.now() - timedelta(minutes=2):
                 # We can break as the remaining records are older
                 break
             data.append(row)
