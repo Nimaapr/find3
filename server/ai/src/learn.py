@@ -60,6 +60,8 @@ from sklearn import cluster, mixture
 from sklearn.neighbors import kneighbors_graph
 from naive_bayes import ExtendedNaiveBayes
 from naive_bayes2 import ExtendedNaiveBayes2
+from sklearn.model_selection import GridSearchCV, StratifiedKFold
+from sklearn.model_selection import RandomizedSearchCV
 
 
 def timeout(timeout):
@@ -162,7 +164,7 @@ class AI(object):
 
         self.results[index] = predict_payload
 
-    @timeout(10)
+    @timeout(100)
     def train(self, clf, x, y):
         return clf.fit(x, y)
 
@@ -233,14 +235,71 @@ class AI(object):
             GaussianNB(),
             QuadraticDiscriminantAnalysis()]
         self.algorithms = {}
+
+        hyperparameters = {
+            "Nearest Neighbors": {
+                'n_neighbors': [3, 5, 7, 9],
+                'weights': ['uniform', 'distance'],
+                'metric': ['euclidean', 'manhattan']
+            },
+            "Linear SVM": {
+                'C': [0.001, 0.01, 0.1, 1, 10],
+                'kernel': ['linear', 'rbf'],
+                'gamma': [0.1, 1, 10, 100]
+            },
+            "RBF SVM": {
+                'C': [0.001, 0.01, 0.1, 1, 10],
+                'gamma': [0.1, 1, 10, 100]
+            },
+            "Decision Tree": {
+                'max_depth': [None, 5, 10, 15, 20],
+                'min_samples_split': [2, 5, 10]
+            },
+            "Random Forest": {
+                'n_estimators': [10, 50, 100, 200],
+                'max_depth': [None, 5, 10, 15, 20],
+                'min_samples_split': [2, 5, 10]
+            },
+            "Neural Net": {
+                'hidden_layer_sizes': [(50,50,50), (50,100,50), (100,)],
+                'activation': ['tanh', 'relu'],
+                'solver': ['sgd', 'adam'],
+                'alpha': [0.0001, 0.05],
+                'learning_rate': ['constant','adaptive'],
+            },
+            "AdaBoost": {
+                'n_estimators': [50, 100, 200],
+                'learning_rate': [0.01, 0.05, 0.1, 0.5, 1]
+            },
+            "Naive Bayes": {},  # GaussianNB doesn't really have hyperparameters to tune
+            "QDA": {
+                'reg_param': [0.0, 0.1, 0.2, 0.3, 0.4, 0.5]
+            }
+        }
+
         # split_for_learning = int(0.70 * len(y))
         for name, clf in zip(names, classifiers):
             t2 = time.time()
             self.logger.debug("learning {}".format(name))
             try:
-                self.algorithms[name] = self.train(clf, x, y)
-                # score = self.algorithms[name].score(x,y)
-                # logger.debug(name, score)
+                # perform grid search with cross-validation
+                grid_search = GridSearchCV(
+                    clf, 
+                    hyperparameters[name], 
+                    cv=StratifiedKFold(n_splits=5),  # 5-fold stratified cross-validation
+                    verbose=0, 
+                    n_jobs=-1  # use all processors
+                )
+                self.algorithms[name] = self.train(grid_search, x, y)
+                score = self.algorithms[name].score(x,y)
+                logger.debug(name, score)
+                # log best parameters found by grid search
+                self.logger.debug(
+                    "Best parameters for {}: {}".format(
+                        name, 
+                        self.algorithms[name].best_params_
+                    )
+                )
                 self.logger.debug("learned {}, {:d} ms".format(
                     name, int(1000 * (t2 - time.time()))))
             except Exception as e:
