@@ -30,6 +30,8 @@ import math
 from threading import Thread
 import functools
 import multiprocessing
+import pandas as pd
+
 
 logger = logging.getLogger('learn')
 logger.setLevel(logging.DEBUG)
@@ -164,6 +166,36 @@ class AI(object):
 
         self.results[index] = predict_payload
 
+    def fill_missing_with_window(self, df, window_size=3):
+        """
+        This function fills missing RSSI values in a DataFrame using a sliding window approach.
+
+        Parameters:
+            df (pd.DataFrame): The DataFrame containing the RSSI readings.
+            window_size (int): The size of the sliding window.
+
+        Returns:
+            pd.DataFrame: The DataFrame with missing RSSI values filled.
+        """
+        # The RSSI column names
+        rssi_columns = [col for col in df.columns if col.startswith("bluetooth-")]
+
+        # Group by location
+        grouped = df.groupby("location")
+
+        # For each group
+        for name, group in grouped:
+            # For each RSSI column
+            for rssi_col in rssi_columns:
+                # Fill missing values using a forward and backward rolling window
+                group[rssi_col] = group[rssi_col].fillna(group[rssi_col].rolling(window_size, min_periods=1).mean())
+                group[rssi_col] = group[rssi_col].fillna(group[rssi_col].rolling(window_size, min_periods=1).mean()[::-1])
+
+        # Concatenate the groups back into a single DataFrame
+        df_filled = pd.concat(grouped)
+
+        return df_filled
+
     @timeout(100)
     def train(self, clf, x, y):
         return clf.fit(x, y)
@@ -200,6 +232,15 @@ class AI(object):
                                 "problem parsing value " + str(val))
                     rows.append(row)
 
+        # Convert rows into a DataFrame
+        df = pd.DataFrame(rows, columns=self.header)
+
+        # Fill missing values using the sliding window approach
+        df = self.fill_missing_with_window(df)
+
+        # Convert the DataFrame back into rows
+        rows = df.values.tolist()
+        
         # first column in row is the classification, Y
         y = numpy.zeros(len(rows))
         x = numpy.zeros((len(rows), len(rows[0]) - 1))
@@ -292,7 +333,8 @@ class AI(object):
                 )
                 self.algorithms[name] = self.train(grid_search, x, y)
                 score = self.algorithms[name].score(x,y)
-                self.logger.debug(name, score)
+                # self.logger.debug(name, score)
+                self.logger.debug("name {}: score {}".format(name, str(score)))
                 # log best parameters found by grid search
                 self.logger.debug(
                     "Best parameters for {}: {}".format(
