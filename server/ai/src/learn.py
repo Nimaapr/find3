@@ -292,7 +292,7 @@ class AI(object):
                 )
                 self.algorithms[name] = self.train(grid_search, x, y)
                 score = self.algorithms[name].score(x,y)
-                logger.debug(name, score)
+                self.logger.debug(name, score)
                 # log best parameters found by grid search
                 self.logger.debug(
                     "Best parameters for {}: {}".format(
