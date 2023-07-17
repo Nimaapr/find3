@@ -236,10 +236,10 @@ class AI(object):
         df = pd.DataFrame(rows, columns=self.header)
 
         # Fill missing values using the sliding window approach
-        # df = self.fill_missing_with_window(df)
+        df = self.fill_missing_with_window(df)
 
-        # # Convert the DataFrame back into rows
-        # rows = df.values.tolist()
+        # Convert the DataFrame back into rows
+        rows = df.values.tolist()
 
         # first column in row is the classification, Y
         y = numpy.zeros(len(rows))
