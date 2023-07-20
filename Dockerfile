@@ -4,9 +4,7 @@
 
 FROM ubuntu:18.04
 
-...
 RUN apt-get update && apt-get install -y software-properties-common
-...
 
 ENV GOLANG_VERSION 1.11
 ENV PATH="/usr/local/go/bin:/usr/local/work/bin:${PATH}"
