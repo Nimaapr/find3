@@ -16,6 +16,7 @@ RUN python3 -m pip install Cython --install-option="--no-cython-compile" && \
 	rm -rf /var/lib/apt/lists/* && \
 	RUN python3 -m pip install Pillow && \
 	RUN python3 -m pip install pykalman && \
+	python3 -m pip install pandas && \
 	set -eux; \
 	\
 # this "case" statement is generated via "update.sh"
