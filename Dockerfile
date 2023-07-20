@@ -15,6 +15,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install --no-instal
 RUN	mkdir /usr/local/work
 RUN	rm -rf /var/lib/apt/lists/* 
 RUN python3 -m pip install --upgrade pip
+RUN apt-get update && apt-get -y upgrade
 RUN pip install numpy scipy matplotlib pandas Cython
 RUN	set -eux; \
 	\
