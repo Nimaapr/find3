@@ -1530,13 +1530,15 @@ func sendOutData(p models.SensorData) (analysis models.LocationAnalysis, err err
 	// call Python function for tracking equipment
 	cmd = exec.Command("python3", "/app/main/src/server/Eq_track.py", p.Family, p.Device)
 	// Collect the output from the Python script
+	var result_eq Output
+
 	output, err = cmd.CombinedOutput()
 	if err != nil {
 		return
 	}
 
 	// Unmarshal the JSON output into the structure
-	err = json.Unmarshal(output, &result)
+	err = json.Unmarshal(output, &result_eq)
 	if err != nil {
 		return
 	}
@@ -1547,7 +1549,7 @@ func sendOutData(p models.SensorData) (analysis models.LocationAnalysis, err err
 		Guesses:           analysis.Guesses,
 		Location:          analysis.Guesses[0].Location,
 		Time:              p.Timestamp,
-		EquipmentLocation: result.Location, // New field
+		EquipmentLocation: result_eq.Location, // New field
 	}
 
 	bTarget, err := json.Marshal(payload)
