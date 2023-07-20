@@ -56,7 +56,7 @@ def read_data_from_csv(filename):
             row['location'] = ref_points[int(location) - 1]
             
             last_timestamp = float(row['timestamp'])
-            if datetime.fromtimestamp(last_timestamp / 1000.0) < datetime.now() - timedelta(minutes=2):
+            if datetime.fromtimestamp(last_timestamp / 1000.0) < datetime.now() - timedelta(minutes=5):
                 # We can break as the remaining records are older
                 break
             data.append(row)

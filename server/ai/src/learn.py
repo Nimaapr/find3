@@ -33,6 +33,7 @@ import multiprocessing
 import pandas as pd
 
 
+
 logger = logging.getLogger('learn')
 logger.setLevel(logging.DEBUG)
 fh = logging.FileHandler('learn.log')
@@ -62,8 +63,10 @@ from sklearn import cluster, mixture
 from sklearn.neighbors import kneighbors_graph
 from naive_bayes import ExtendedNaiveBayes
 from naive_bayes2 import ExtendedNaiveBayes2
+from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.model_selection import GridSearchCV, StratifiedKFold
 from sklearn.model_selection import RandomizedSearchCV
+from sklearn.metrics import adjusted_rand_score
 
 
 def timeout(timeout):
@@ -104,6 +107,8 @@ class AI(object):
     def classify(self, sensor_data):
         header = self.header[1:]
         is_unknown = True
+        # self.logger.debug(f"sensor data in classify: {sensor_data}")
+        # self.logger.debug(f"header in classify: {self.header}")
         csv_data = numpy.zeros(len(header))
         for sensorType in sensor_data['s']:
             for sensor in sensor_data['s'][sensorType]:
@@ -166,7 +171,7 @@ class AI(object):
 
         self.results[index] = predict_payload
 
-    def fill_missing_with_window(self, df, window_size=3):
+    def fill_missing_with_window(self, df, window_size=15):
         """
         This function fills missing RSSI values in a DataFrame using a sliding window approach.
 
@@ -178,21 +183,51 @@ class AI(object):
             pd.DataFrame: The DataFrame with missing RSSI values filled.
         """
         # The RSSI column names
+        # self.logger.debug(f"all columns: {df.columns}")
         rssi_columns = [col for col in df.columns if col.startswith("bluetooth-")]
+        # self.logger.debug(f"type of first element: {df['bluetooth-St_Equ4_KBPro_390']}")
+        # self.logger.debug(f"type of first element: {type(df['bluetooth-St_Equ4_KBPro_390'].iloc[0])}")
+        # self.logger.debug(f"type of first element: {df.dtypes}")
 
         # Group by location
         grouped = df.groupby("location")
 
+        # Create an empty list to store the processed groups
+        df_list = []
+
         # For each group
         for name, group in grouped:
+            # self.logger.debug(f"Processing group: {name}")
             # For each RSSI column
             for rssi_col in rssi_columns:
-                # Fill missing values using a forward and backward rolling window
-                group[rssi_col] = group[rssi_col].fillna(group[rssi_col].rolling(window_size, min_periods=1).mean())
-                group[rssi_col] = group[rssi_col].fillna(group[rssi_col].rolling(window_size, min_periods=1).mean()[::-1])
+                # self.logger.debug(f"Processing column: {rssi_col}")
+                try:
+                    # Replace empty strings with NaN
+                    group[rssi_col] = group[rssi_col].replace(0.0, numpy.nan)
+                    # Fill missing values using a forward and backward rolling window
+                    group[rssi_col] = group[rssi_col].fillna(group[rssi_col].rolling(window_size, min_periods=1).mean())
+                    group[rssi_col] = group[rssi_col].fillna(group[rssi_col].rolling(window_size, min_periods=1).mean()[::-1])
+                    # If the above line doesn't fill all NaN values, repeat the process again
+                    group[rssi_col] = group[rssi_col].fillna(group[rssi_col].rolling(window_size, min_periods=1).mean())
+                    # Replace any remaining NaNs back to 0.0
+                    group[rssi_col] = group[rssi_col].replace(numpy.nan, 0)
+
+                    # Convert the column to string
+                    # group[rssi_col] = group[rssi_col].astype(str)
+                    # Replace '0.0' with empty string
+                    # group[rssi_col] = group[rssi_col].replace('0.0', '')
+                except Exception as e:
+                    self.logger.debug(f"Error: {e}")
+
+            # Add the processed group to the list
+            df_list.append(group)
 
         # Concatenate the groups back into a single DataFrame
-        df_filled = pd.concat(grouped)
+        try:
+            df_filled = pd.concat(df_list)
+            # self.logger.debug(f"new df: {df_filled}")
+        except Exception as e:
+            self.logger.debug(f"Error in concat: {e}")
 
         return df_filled
 
@@ -202,6 +237,7 @@ class AI(object):
 
     def learn(self, fname):
         t = time.time()
+        # self.logger.debug(f"csv folder: {fname}")
         # load CSV file
         self.header = []
         rows = []
@@ -210,6 +246,7 @@ class AI(object):
             reader = csv.reader(csvfile, delimiter=',')
             for i, row in enumerate(reader):
                 self.logger.debug(row)
+                # self.logger.debug(f"type of row: {type(row[0])}")
                 if i == 0:
                     self.header = row
                 else:
@@ -230,16 +267,36 @@ class AI(object):
                         except:
                             self.logger.error(
                                 "problem parsing value " + str(val))
+                    # self.logger.debug(f"type of row[0] before appending: {type(row[0])}")
                     rows.append(row)
 
+
+        # self.logger.debug(f"Rows before sliding window: {rows[0]}")
+        # self.logger.debug(f"Rows before sliding window: {type(rows[0][2])}")
         # Convert rows into a DataFrame
         df = pd.DataFrame(rows, columns=self.header)
 
         # Fill missing values using the sliding window approach
         df = self.fill_missing_with_window(df)
+        # Convert the 'location' column back to integer
+        df['location'] = df['location'].astype(int)
 
         # Convert the DataFrame back into rows
+        # rows = df.astype(str).values.tolist()
+        # bluetooth_columns = [col for col in df.columns if col.startswith("bluetooth-")]
+        # df[bluetooth_columns] = df[bluetooth_columns].astype(str)
         rows = df.values.tolist()
+        # Iterate over the rows
+        for i, row in enumerate(rows):
+            # Iterate over the items in each row
+            for j, item in enumerate(row):
+                # If the item is 0.0, change it to 0
+                if item == 0.0:
+                    rows[i][j] = 0
+
+
+        # self.logger.debug(f"Rows after sliding window: {rows[0]}")
+        # self.logger.debug(f"Rows after sliding window: {type(rows[0][2])}")
 
         # first column in row is the classification, Y
         y = numpy.zeros(len(rows))
@@ -262,7 +319,8 @@ class AI(object):
             "Neural Net",
             "AdaBoost",
             "Naive Bayes",
-            "QDA"]
+            "QDA",
+            "Gradient Boosting"]
         classifiers = [
             KNeighborsClassifier(3),
             SVC(kernel="linear", C=0.025, probability=True),
@@ -271,10 +329,11 @@ class AI(object):
             DecisionTreeClassifier(max_depth=5),
             RandomForestClassifier(
                 max_depth=5, n_estimators=10, max_features=1),
-            MLPClassifier(alpha=1),
+            MLPClassifier(alpha=1, early_stopping=True),
             AdaBoostClassifier(),
             GaussianNB(),
-            QuadraticDiscriminantAnalysis()]
+            QuadraticDiscriminantAnalysis(),
+            GradientBoostingClassifier()]
         self.algorithms = {}
 
         hyperparameters = {
@@ -305,7 +364,7 @@ class AI(object):
                 'hidden_layer_sizes': [(50,50,50), (50,100,50), (100,)],
                 'activation': ['tanh', 'relu'],
                 'solver': ['sgd', 'adam'],
-                'alpha': [0.0001, 0.05],
+                'alpha': [0.0001, 0.001, 0.05],
                 'learning_rate': ['constant','adaptive'],
             },
             "AdaBoost": {
@@ -315,6 +374,12 @@ class AI(object):
             "Naive Bayes": {},  # GaussianNB doesn't really have hyperparameters to tune
             "QDA": {
                 'reg_param': [0.0, 0.1, 0.2, 0.3, 0.4, 0.5]
+            },
+            "Gradient Boosting":{
+                'n_estimators': [100, 200, 300],
+                'learning_rate': [0.01, 0.1, 1.0],
+                'subsample' : [0.5, 0.7, 1.0],
+                'max_depth': [3, 7, 9],
             }
         }
 
@@ -331,6 +396,13 @@ class AI(object):
                     verbose=0, 
                     n_jobs=-1  # use all processors
                 )
+                # grid_search = RandomizedSearchCV(
+                #     clf, 
+                #     hyperparameters[name], 
+                #     cv=StratifiedKFold(n_splits=5),  # 5-fold stratified cross-validation
+                #     verbose=0, 
+                #     n_jobs=-1  # use all processors
+                # )
                 self.algorithms[name] = self.train(grid_search, x, y)
                 score = self.algorithms[name].score(x,y)
                 # self.logger.debug(name, score)
@@ -436,6 +508,12 @@ def do():
             y_pred = algorithm.labels_.astype(numpy.int)
         else:
             y_pred = algorithm.predict(ai.x)
+        # Compute the Adjusted Rand Index
+        ari = adjusted_rand_score(ai.y, y_pred)
+        # log the ARI
+        self.logger.debug(f"Adjusted Rand Index of {name}: {ari:.2f}")
+
+
         if max(y_pred) > 3:
             continue
         known_groups = {}
