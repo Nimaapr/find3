@@ -14,8 +14,8 @@ RUN python3 -m pip install Cython --install-option="--no-cython-compile"
 RUN	apt-get install --no-install-recommends -y python3-scipy python3-numpy python3-matplotlib
 RUN	mkdir /usr/local/work
 RUN	rm -rf /var/lib/apt/lists/* 
-RUN python3 -m pip install pandas && \
-	set -eux; \
+# RUN python3 -m pip install pandas
+RUN	set -eux; \
 	\
 # this "case" statement is generated via "update.sh"
 	dpkgArch="$(dpkg --print-architecture)"; \
