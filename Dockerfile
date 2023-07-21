@@ -6,7 +6,7 @@ FROM ubuntu:18.04
 
 # RUN apt-get update && apt-get install -y software-properties-common
 
-ENV GOLANG_VERSION 1.11
+ENV GOLANG_VERSION 1.19
 ENV PATH="/usr/local/go/bin:/usr/local/work/bin:${PATH}"
 ENV GOPATH /usr/local/work
 ENV GO111MODULE=on
@@ -26,6 +26,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install --no-instal
 	liblapack-dev gfortran
 # RUN python3 -m pip install Cython --install-option="--no-cython-compile"
 # RUN	apt-get install --no-install-recommends -y python3-scipy python3-numpy python3-matplotlib
+
 # RUN python3 -m pip install --upgrade pip
 # RUN pip install numpy scipy matplotlib pandas
 RUN	mkdir /usr/local/work
