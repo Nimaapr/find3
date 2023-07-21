@@ -18,9 +18,9 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install --no-instal
 	python3-pip \
 	python3-setuptools python3-wheel supervisor libfreetype6-dev libopenblas-dev libblas-dev \
 	liblapack-dev gfortran \
-	# python3 -m pip install Cython --install-option="--no-cython-compile" \
-	python3 -m pip install Cython \
-	apt-get install --no-install-recommends -y python3-scipy python3-numpy python3-matplotlib
+RUN	python3 -m pip install Cython --install-option="--no-cython-compile"
+# RUN python3 -m pip install Cython \
+RUN	apt-get install --no-install-recommends -y python3-scipy python3-numpy python3-matplotlib
 
 # RUN apt update && apt install -y tcl
 # RUN python3 -m pip install --upgrade pip
