@@ -15,12 +15,12 @@ ENV GO111MODULE=on
 # RUN apt-get update && apt-get -y upgrade && \
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y \ 
 	wget git libc6-dev make pkg-config g++ gcc mosquitto-clients mosquitto python3 python3-dev \ 
-	python3-pip \
+	python3-pip python3-matplotlib \
 	python3-setuptools python3-wheel supervisor libfreetype6-dev libopenblas-dev libblas-dev \
 	liblapack-dev gfortran
 RUN	python3 -m pip install Cython --install-option="--no-cython-compile"
 # RUN python3 -m pip install Cython \
-RUN	apt-get install --no-install-recommends -y python3-scipy python3-numpy python3-matplotlib
+RUN	apt-get install --no-install-recommends -y python3-scipy python3-numpy
 
 # RUN apt update && apt install -y tcl
 # RUN python3 -m pip install --upgrade pip
