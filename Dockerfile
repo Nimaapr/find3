@@ -31,10 +31,9 @@ ENV GOPATH /usr/local/work
 # RUN pip install numpy scipy matplotlib pandas
 RUN	mkdir /usr/local/work
 RUN	rm -rf /var/lib/apt/lists/* 
-RUN	set -eux; \
-	\
+# RUN	set -eux; 
 # this "case" statement is generated via "update.sh"
-	dpkgArch="$(dpkg --print-architecture)"; \
+RUN	dpkgArch="$(dpkg --print-architecture)"; \
 	case "${dpkgArch##*-}" in \
 		amd64) goRelArch='linux-amd64'; goRelSha256='b3fcf280ff86558e0559e185b601c9eade0fd24c900b4c63cd14d1d38613e499' ;; \
 		armhf) goRelArch='linux-armv6l'; goRelSha256='8ffeb3577d8ca5477064f1cb8739835973c866487f2bf81df1227eaa96826acd' ;; \
