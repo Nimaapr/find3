@@ -4,18 +4,12 @@
 
 FROM ubuntu:18.04
 
-# RUN apt-get update && apt-get install -y software-properties-common
 
 ENV GOLANG_VERSION 1.11
 ENV PATH="/usr/local/go/bin:/usr/local/work/bin:${PATH}"
 ENV GOPATH /usr/local/work
 ENV GO111MODULE=on
 
-# RUN apt-get install -y software-properties-common
-# RUN add-apt-repository ppa:deadsnakes/ppa
-# RUN apt-get update
-# RUN apt-get install -y python3.9 python3.9-dev python3.9-distutils
-# RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.9 1
 # RUN python3 -m pip install --upgrade pip
 
 # RUN apt-get update && apt-get -y upgrade && \
@@ -24,7 +18,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install --no-instal
 	python3-pip \
 	python3-setuptools python3-wheel supervisor libfreetype6-dev libopenblas-dev libblas-dev \
 	liblapack-dev gfortran
-# RUN python3 -m pip install Cython --install-option="--no-cython-compile"
+RUN python3 -m pip install Cython --install-option="--no-cython-compile"
 # RUN	apt-get install --no-install-recommends -y python3-scipy python3-numpy python3-matplotlib
 
 # RUN python3 -m pip install --upgrade pip
