@@ -27,7 +27,7 @@ RUN	apt-get install --no-install-recommends -y python3-scipy python3-numpy pytho
 # RUN pip install numpy scipy matplotlib pandas
 RUN	mkdir /usr/local/work
 RUN	rm -rf /var/lib/apt/lists/* 
-RUN	set -eux; 
+RUN	set -eu; 
 # this "case" statement is generated via "update.sh"
 RUN	dpkgArch="$(dpkg --print-architecture)"; \
 	case "${dpkgArch##*-}" in \
