@@ -19,7 +19,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install --no-instal
 	python3-setuptools python3-wheel supervisor libfreetype6-dev libopenblas-dev libblas-dev \
 	liblapack-dev gfortran
 RUN python3 -m pip install Cython --install-option="--no-cython-compile"
-# RUN	apt-get install --no-install-recommends -y python3-scipy python3-numpy python3-matplotlib
+RUN	apt-get install --no-install-recommends -y python3-scipy python3-numpy python3-matplotlib
 
 # RUN python3 -m pip install --upgrade pip
 # RUN pip install numpy scipy matplotlib pandas
