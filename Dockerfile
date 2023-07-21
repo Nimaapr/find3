@@ -6,10 +6,10 @@ FROM ubuntu:18.04
 
 # RUN apt-get update && apt-get install -y software-properties-common
 
-ENV GOLANG_VERSION 1.19
+ENV GOLANG_VERSION 1.11
 ENV PATH="/usr/local/go/bin:/usr/local/work/bin:${PATH}"
 ENV GOPATH /usr/local/work
-ENV GO111MODULE=on
+# ENV GO111MODULE=on
 
 # RUN apt-get install -y software-properties-common
 # RUN add-apt-repository ppa:deadsnakes/ppa
@@ -19,11 +19,11 @@ ENV GO111MODULE=on
 # RUN python3 -m pip install --upgrade pip
 
 # RUN apt-get update && apt-get -y upgrade && \
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y \ 
-	wget git libc6-dev make pkg-config g++ gcc mosquitto-clients mosquitto python3 python3-dev \ 
-	python3-pip \
-	python3-setuptools python3-wheel supervisor libfreetype6-dev libopenblas-dev libblas-dev \
-	liblapack-dev gfortran
+# RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y \ 
+# 	wget git libc6-dev make pkg-config g++ gcc mosquitto-clients mosquitto python3 python3-dev \ 
+# 	python3-pip \
+# 	python3-setuptools python3-wheel supervisor libfreetype6-dev libopenblas-dev libblas-dev \
+# 	liblapack-dev gfortran
 # RUN python3 -m pip install Cython --install-option="--no-cython-compile"
 # RUN	apt-get install --no-install-recommends -y python3-scipy python3-numpy python3-matplotlib
 
