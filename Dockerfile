@@ -10,7 +10,7 @@ ENV PATH="/usr/local/go/bin:/usr/local/work/bin:${PATH}"
 ENV GOPATH /usr/local/work
 ENV GO111MODULE=on
 
-# RUN python3 -m pip install --upgrade pip
+RUN python3 -m pip install --upgrade pip
 
 # RUN apt-get update && apt-get -y upgrade && \
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y \ 
@@ -18,7 +18,8 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install --no-instal
 	python3-pip python3-matplotlib \
 	python3-setuptools python3-wheel supervisor libfreetype6-dev libopenblas-dev libblas-dev \
 	liblapack-dev gfortran
-RUN	python3 -m pip install Cython --install-option="--no-cython-compile"
+# RUN	python3 -m pip install Cython --install-option="--no-cython-compile"
+RUN pip install --upgrade cython
 # RUN python3 -m pip install Cython \
 RUN	apt-get install --no-install-recommends -y python3-scipy python3-numpy python3-pandas
 
