@@ -67,6 +67,7 @@ from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.model_selection import GridSearchCV, StratifiedKFold
 from sklearn.model_selection import RandomizedSearchCV
 from sklearn.metrics import adjusted_rand_score
+from sklearn.metrics import confusion_matrix
 
 
 def timeout(timeout):
@@ -183,11 +184,7 @@ class AI(object):
             pd.DataFrame: The DataFrame with missing RSSI values filled.
         """
         # The RSSI column names
-        # self.logger.debug(f"all columns: {df.columns}")
         rssi_columns = [col for col in df.columns if col.startswith("bluetooth-")]
-        # self.logger.debug(f"type of first element: {df['bluetooth-St_Equ4_KBPro_390']}")
-        # self.logger.debug(f"type of first element: {type(df['bluetooth-St_Equ4_KBPro_390'].iloc[0])}")
-        # self.logger.debug(f"type of first element: {df.dtypes}")
 
         # Group by location
         grouped = df.groupby("location")
@@ -197,10 +194,8 @@ class AI(object):
 
         # For each group
         for name, group in grouped:
-            # self.logger.debug(f"Processing group: {name}")
             # For each RSSI column
             for rssi_col in rssi_columns:
-                # self.logger.debug(f"Processing column: {rssi_col}")
                 try:
                     # Replace empty strings with NaN
                     group[rssi_col] = group[rssi_col].replace(0.0, numpy.nan)
@@ -211,11 +206,6 @@ class AI(object):
                     group[rssi_col] = group[rssi_col].fillna(group[rssi_col].rolling(window_size, min_periods=1).mean())
                     # Replace any remaining NaNs back to 0.0
                     group[rssi_col] = group[rssi_col].replace(numpy.nan, 0)
-
-                    # Convert the column to string
-                    # group[rssi_col] = group[rssi_col].astype(str)
-                    # Replace '0.0' with empty string
-                    # group[rssi_col] = group[rssi_col].replace('0.0', '')
                 except Exception as e:
                     self.logger.debug(f"Error: {e}")
 
@@ -246,7 +236,6 @@ class AI(object):
             reader = csv.reader(csvfile, delimiter=',')
             for i, row in enumerate(reader):
                 self.logger.debug(row)
-                # self.logger.debug(f"type of row: {type(row[0])}")
                 if i == 0:
                     self.header = row
                 else:
@@ -271,8 +260,6 @@ class AI(object):
                     rows.append(row)
 
 
-        # self.logger.debug(f"Rows before sliding window: {rows[0]}")
-        # self.logger.debug(f"Rows before sliding window: {type(rows[0][2])}")
         # Convert rows into a DataFrame
         df = pd.DataFrame(rows, columns=self.header)
 
@@ -282,9 +269,6 @@ class AI(object):
         df['location'] = df['location'].astype(int)
 
         # Convert the DataFrame back into rows
-        # rows = df.astype(str).values.tolist()
-        # bluetooth_columns = [col for col in df.columns if col.startswith("bluetooth-")]
-        # df[bluetooth_columns] = df[bluetooth_columns].astype(str)
         rows = df.values.tolist()
         # Iterate over the rows
         for i, row in enumerate(rows):
@@ -293,10 +277,6 @@ class AI(object):
                 # If the item is 0.0, change it to 0
                 if item == 0.0:
                     rows[i][j] = 0
-
-
-        # self.logger.debug(f"Rows after sliding window: {rows[0]}")
-        # self.logger.debug(f"Rows after sliding window: {type(rows[0][2])}")
 
         # first column in row is the classification, Y
         y = numpy.zeros(len(rows))
@@ -389,20 +369,13 @@ class AI(object):
             self.logger.debug("learning {}".format(name))
             try:
                 # perform grid search with cross-validation
-                grid_search = GridSearchCV(
+                grid_search = RandomizedSearchCV(
                     clf, 
                     hyperparameters[name], 
                     cv=StratifiedKFold(n_splits=5),  # 5-fold stratified cross-validation
                     verbose=0, 
                     n_jobs=-1  # use all processors
                 )
-                # grid_search = RandomizedSearchCV(
-                #     clf, 
-                #     hyperparameters[name], 
-                #     cv=StratifiedKFold(n_splits=5),  # 5-fold stratified cross-validation
-                #     verbose=0, 
-                #     n_jobs=-1  # use all processors
-                # )
                 self.algorithms[name] = self.train(grid_search, x, y)
                 score = self.algorithms[name].score(x,y)
                 # self.logger.debug(name, score)
@@ -414,6 +387,21 @@ class AI(object):
                         self.algorithms[name].best_params_
                     )
                 )
+
+                # Log feature importance for tree-based models
+                if name in ["Decision Tree", "Random Forest", "Gradient Boosting"]:
+                    feature_importances = self.algorithms[name].best_estimator_.feature_importances_
+                    self.logger.debug("Feature importances for {}: {}".format(name, feature_importances))
+
+                # Log confusion matrix
+                y_pred = self.algorithms[name].predict(x)
+                cm = confusion_matrix(y, y_pred)
+                self.logger.debug("Confusion matrix for {}: {}".format(name, cm))
+
+                # Log cross-validation results
+                cv_results = self.algorithms[name].cv_results_
+                self.logger.debug("Cross-validation results for {}: {}".format(name, cv_results))
+
                 self.logger.debug("learned {}, {:d} ms".format(
                     name, int(1000 * (t2 - time.time()))))
             except Exception as e:

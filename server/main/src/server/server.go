@@ -1534,12 +1534,14 @@ func sendOutData(p models.SensorData) (analysis models.LocationAnalysis, err err
 
 	output, err = cmd.CombinedOutput()
 	if err != nil {
+		logger.Log.Debugf("Error in getting output: %v", err)
 		return
 	}
 
 	// Unmarshal the JSON output into the structure
 	err = json.Unmarshal(output, &result_eq)
 	if err != nil {
+		logger.Log.Debugf("Error in unmarshaling JSON: %v", err)
 		return
 	}
 	// *****************************************************

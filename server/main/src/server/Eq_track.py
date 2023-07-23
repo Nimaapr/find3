@@ -5,9 +5,27 @@ from datetime import datetime, timedelta
 from scipy.optimize import least_squares
 import sys
 from collections import defaultdict
+import logging
+
+logger = logging.getLogger('track')
+logger.setLevel(logging.DEBUG)
+fh = logging.FileHandler('track.log')
+fh.setLevel(logging.DEBUG)
+ch = logging.StreamHandler()
+ch.setLevel(logging.DEBUG)
+formatter = logging.Formatter(
+    '%(asctime)s - [%(name)s/%(funcName)s] - %(levelname)s - %(message)s')
+fh.setFormatter(formatter)
+ch.setFormatter(formatter)
+logger.addHandler(fh)
+logger.addHandler(ch)
+
+
 
 family = sys.argv[1]
 device = sys.argv[2]
+
+logger.debug(f"family data in track: {family}")
 
 with open('/app/main/static/img2/track_data.txt', 'a') as f:
         f.write(device + "\n")
