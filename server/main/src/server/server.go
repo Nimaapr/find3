@@ -1541,7 +1541,7 @@ func sendOutData(p models.SensorData) (analysis models.LocationAnalysis, err err
 	// Unmarshal the JSON output into the structure
 	err = json.Unmarshal(output, &result_eq)
 	if err != nil {
-		logger.Log.Debugf("Error in unmarshaling JSON: %v, Output: %s", err, out.String())
+		logger.Log.Debugf("Error in unmarshaling JSON: %v", err)
 		return
 	}
 
