@@ -27,9 +27,6 @@ device = sys.argv[2]
 
 logger.debug(f"family data in track: {family}")
 
-with open('/app/main/static/img2/track_data.txt', 'a') as f:
-        f.write(device + "\n")
-        f.write(family + "\n")
 
 def calculate_distance(rssi, tx_power):
     # tx_power is the RSSI value at 1 meter distance
@@ -151,6 +148,10 @@ else:
 
 # return avg_position
 
+with open('/app/main/static/img2/track_data.txt', 'a') as f:
+        f.write(device + "\n")
+        f.write(family + "\n")
+        f.write(avg_position + "\n")
 
 location= avg_position
 result = {
