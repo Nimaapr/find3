@@ -1530,40 +1530,40 @@ func sendOutData(p models.SensorData) (analysis models.LocationAnalysis, err err
 	// call Python function for tracking equipment
 	cmd = exec.Command("python3", "/app/main/src/server/Eq_track.py", p.Family, p.Device)
 	// Collect the output from the Python script
-	// var result_eq Output
+	var result_eq Output
 
-	// output, err = cmd.CombinedOutput()
-	// if err != nil {
-	// 	logger.Log.Debugf("Error in getting output: %v", err)
-	// 	return
-	// }
-
-	// // Unmarshal the JSON output into the structure
-	// err = json.Unmarshal(output, &result_eq)
-	// if err != nil {
-	// 	logger.Log.Debugf("Error in unmarshaling JSON: %v", err)
-	// 	return
-	// }
-
-	// Collect the output from the Python script
-	var out bytes.Buffer
-	var stderr bytes.Buffer
-	cmd.Stdout = &out
-	cmd.Stderr = &stderr
-
-	err = cmd.Run()
+	output, err = cmd.CombinedOutput()
 	if err != nil {
-		logger.Log.Debugf("Error in running Python script: %v, Stderr: %s", err, stderr.String())
+		logger.Log.Debugf("Error in getting output: %v", err)
 		return
 	}
 
 	// Unmarshal the JSON output into the structure
-	output := out.Bytes()
 	err = json.Unmarshal(output, &result_eq)
 	if err != nil {
 		logger.Log.Debugf("Error in unmarshaling JSON: %v, Output: %s", err, out.String())
 		return
 	}
+
+	// Collect the output from the Python script
+	// var out bytes.Buffer
+	// var stderr bytes.Buffer
+	// cmd.Stdout = &out
+	// cmd.Stderr = &stderr
+
+	// err = cmd.Run()
+	// if err != nil {
+	// 	logger.Log.Debugf("Error in running Python script: %v, Stderr: %s", err, stderr.String())
+	// 	return
+	// }
+
+	// // Unmarshal the JSON output into the structure
+	// output := out.Bytes()
+	// err = json.Unmarshal(output, &result_eq)
+	// if err != nil {
+	// 	logger.Log.Debugf("Error in unmarshaling JSON: %v, Output: %s", err, out.String())
+	// 	return
+	// }
 
 	// *****************************************************
 
