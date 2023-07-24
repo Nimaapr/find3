@@ -2,7 +2,7 @@
 # mkdir /tmp/find3
 # docker run -p 11883:1883 -p 8003:8003 -v /tmp/find3:/data -t find3
 
-FROM ubuntu:18.04
+FROM ubuntu:20.04
 
 
 ENV GOLANG_VERSION 1.11
