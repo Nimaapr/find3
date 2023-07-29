@@ -6,14 +6,15 @@ import sys
 # Get the three inputs from command-line arguments
 device_num = sys.argv[1]
 location_all = sys.argv[2]
-
+family= "site4"
 
 
 # location = location -1 : numbers start from 1.
 def show_floorplan(device_num, location_all):
     floor_level = location_all[:2]
     location = location_all[2:4]
-    floor_str = "/app/main/static/img2/org_floorplan" + str(floor_level) + ".png"
+    # floor_str = "/app/main/static/img2/org_floorplan" + str(floor_level) + ".png"
+    floor_str = "/data/data/org_floorplan" + family + str(floor_level) + ".png"
     img_array = plt.imread(floor_str)
     fig, ax = plt.subplots()
     ax.imshow(img_array)

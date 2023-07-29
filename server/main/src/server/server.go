@@ -1528,22 +1528,22 @@ func sendOutData(p models.SensorData) (analysis models.LocationAnalysis, err err
 	analysis.Guesses[0].Location = result.Location
 
 	// call Python function for tracking equipment
-	cmd = exec.Command("python3", "/app/main/src/server/Eq_track.py", p.Family, p.Device)
-	// Collect the output from the Python script
-	var result_eq Output
+	// cmd = exec.Command("python3", "/app/main/src/server/Eq_track.py", p.Family, p.Device)
+	// // Collect the output from the Python script
+	// var result_eq Output
 
-	output, err = cmd.CombinedOutput()
-	if err != nil {
-		logger.Log.Debugf("Error in getting output: %v", err)
-		return
-	}
+	// output, err = cmd.CombinedOutput()
+	// if err != nil {
+	// 	logger.Log.Debugf("Error in getting output: %v", err)
+	// 	return
+	// }
 
-	// Unmarshal the JSON output into the structure
-	err = json.Unmarshal(output, &result_eq)
-	if err != nil {
-		logger.Log.Debugf("Error in unmarshaling JSON: %v", err)
-		return
-	}
+	// // Unmarshal the JSON output into the structure
+	// err = json.Unmarshal(output, &result_eq)
+	// if err != nil {
+	// 	logger.Log.Debugf("Error in unmarshaling JSON: %v", err)
+	// 	return
+	// }
 
 	// Collect the output from the Python script
 	// var out bytes.Buffer
