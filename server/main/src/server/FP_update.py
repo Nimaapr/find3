@@ -14,15 +14,24 @@ family= sys.argv[3]
 def show_floorplan(device_num, location_all, family):
     floor_level = location_all[:2]
     location = location_all[2:4]
+
+    with open('/app/main/static/img2/empty_file_inside.txt', 'w') as file:
+    file.write('/app/main/static/img2/floorplan{}.png'.format(floor_level) + "\n")
+    file.write(f"Device {device_num}" + "\n")
+    file.write(str(position) + "\n")
+    
     # floor_str = "/app/main/static/img2/org_floorplan" + str(floor_level) + ".png"
+    floor_str = "/data/data/org_floorplan" + family + str(floor_level) + ".png"
+
+
     try:
-        floor_str = "/data/data/org_floorplan" + family + str(floor_level) + ".png"
+        img_array = plt.imread(floor_str)
     except Exception as e:
         # If an error occurs, write it to a file
         with open("/app/main/static/img2/error_log.txt", "a") as error_file:
             error_file.write(str(e) + "\n")
-
-    img_array = plt.imread(floor_str)
+        sys.exit(1)
+    
     fig, ax = plt.subplots()
     ax.imshow(img_array)
 #     real access points
@@ -37,20 +46,24 @@ def show_floorplan(device_num, location_all, family):
     # fig.savefig('/app/main/static/img2/floorplan{}.png'.format(floor_level))
     fig.savefig('/app/main/static/img2/floorplan.png')
     # plt.show()
-    with open('/app/main/static/img2/empty_file_inside.txt', 'w') as file:
-        file.write('/app/main/static/img2/floorplan{}.png'.format(floor_level) + "\n")
-        file.write(f"Device {device_num}" + "\n")
-        file.write(str(position) + "\n")
+
 
 # floor_level = 1
 # device_num = 12
 # location = 7
-
-show_floorplan(device_num, location_all, family)
-
 
 with open('/app/main/static/img2/empty_file_outside.txt', 'w') as f:
     # f.write(floor_level + "\n")
     # f.write(type(floor_level) + "\n")
     f.write(device_num + "\n")
     f.write(location_all + "\n")
+
+
+try:
+    show_floorplan(device_num, location_all, family)
+except Exception as e:
+    # If an error occurs, write it to a file
+    with open("/app/main/static/img2/error_log2.txt", "a") as error_file:
+        error_file.write(str(e) + "\n")
+    sys.exit(1)
+
