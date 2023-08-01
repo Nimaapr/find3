@@ -11,11 +11,17 @@ family= sys.argv[3]
 
 
 # location = location -1 : numbers start from 1.
-def show_floorplan(device_num, location_all):
+def show_floorplan(device_num, location_all, family):
     floor_level = location_all[:2]
     location = location_all[2:4]
     # floor_str = "/app/main/static/img2/org_floorplan" + str(floor_level) + ".png"
-    floor_str = "/data/data/org_floorplan" + family + str(floor_level) + ".png"
+    try:
+        floor_str = "/data/data/org_floorplan" + family + str(floor_level) + ".png"
+    except Exception as e:
+        # If an error occurs, write it to a file
+        with open("/app/main/static/img2/error_log.txt", "a") as error_file:
+            error_file.write(str(e) + "\n")
+
     img_array = plt.imread(floor_str)
     fig, ax = plt.subplots()
     ax.imshow(img_array)
@@ -40,11 +46,11 @@ def show_floorplan(device_num, location_all):
 # device_num = 12
 # location = 7
 
+show_floorplan(device_num, location_all, family)
+
+
 with open('/app/main/static/img2/empty_file_outside.txt', 'w') as f:
     # f.write(floor_level + "\n")
     # f.write(type(floor_level) + "\n")
     f.write(device_num + "\n")
     f.write(location_all + "\n")
-
-
-show_floorplan(device_num, location_all)

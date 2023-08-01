@@ -1596,6 +1596,7 @@ func sendOutData(p models.SensorData) (analysis models.LocationAnalysis, err err
 	cmd = exec.Command("python3", "/app/main/src/server/FP_update.py", p.Device, analysis.Guesses[0].Location, p.Family)
 	err = cmd.Run()
 	if err != nil {
+		logger.Log.Debugf("Error in FP_Update: %v", err)
 		return
 	}
 
