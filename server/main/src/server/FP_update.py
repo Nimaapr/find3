@@ -6,7 +6,8 @@ import sys
 # Get the three inputs from command-line arguments
 device_num = sys.argv[1]
 location_all = sys.argv[2]
-family= "site4"
+# family= "site4"
+family= sys.argv[3]
 
 
 # location = location -1 : numbers start from 1.
