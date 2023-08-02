@@ -9,16 +9,15 @@ location_all = sys.argv[2]
 # family= "site4"
 family= sys.argv[3]
 
+with open('/app/main/static/img2/empty_file_outside.txt', 'w') as f:
+    f.write(device_num + "\n")
+    f.write(location_all + "\n")
+
 
 # location = location -1 : numbers start from 1.
 def show_floorplan(device_num, location_all, family):
     floor_level = location_all[:2]
     location = location_all[2:4]
-
-    with open('/app/main/static/img2/empty_file_inside.txt', 'w') as file:
-    file.write('/app/main/static/img2/floorplan{}.png'.format(floor_level) + "\n")
-    file.write(f"Device {device_num}" + "\n")
-    file.write(str(position) + "\n")
     
     # floor_str = "/app/main/static/img2/org_floorplan" + str(floor_level) + ".png"
     floor_str = "/data/data/org_floorplan" + family + str(floor_level) + ".png"
@@ -46,17 +45,15 @@ def show_floorplan(device_num, location_all, family):
     # fig.savefig('/app/main/static/img2/floorplan{}.png'.format(floor_level))
     fig.savefig('/app/main/static/img2/floorplan.png')
     # plt.show()
+    with open('/app/main/static/img2/empty_file_inside.txt', 'w') as file:
+        file.write('/app/main/static/img2/floorplan{}.png'.format(floor_level) + "\n")
+        file.write(f"Device {device_num}" + "\n")
+        file.write(str(position) + "\n")
 
 
 # floor_level = 1
 # device_num = 12
 # location = 7
-
-with open('/app/main/static/img2/empty_file_outside.txt', 'w') as f:
-    # f.write(floor_level + "\n")
-    # f.write(type(floor_level) + "\n")
-    f.write(device_num + "\n")
-    f.write(location_all + "\n")
 
 
 try:
